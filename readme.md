@@ -1,6 +1,9 @@
 
 # FloGen
 
+本地二维网络入口、参数及权重使用说明见 [二维神经网络使用说明](二维神经网络使用说明.md)，
+详细网络结构和已完成训练结果见 [MODEL_2D.md](MODEL_2D.md)。
+
 FlowGen is a universal flowfield generator based on machine learning and implentmented in Pytorch. 
 - It differs from other data-driven flowfield generators that it introduce **physics knowledge** to enhance the predicting accuracy and generaliztion capability. 
 - It has been applied to the prediction of airfoil, [wing](#web-wing---interactive-transonic-wing-design-app) and single expansion ramp nozzle (SERN).

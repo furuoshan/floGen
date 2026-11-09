@@ -481,7 +481,8 @@ class SuperFoilData(Dataset):
 class SuperWingData(Dataset):
     """Native layout; inference never reads CFD target fields or SLD labels."""
     def __init__(self, root, target="field", require_reynolds=False,
-                 reynolds=None,reynolds_file=None, *, geometry_root=None,index_columns=(12,)):
+                 reynolds=None,reynolds_file=None, *, geometry_root=None,index_columns=(12,),
+                 config_columns=(41,55)):
         self.root=Path(root).resolve()
         self.geometry_root=(Path(geometry_root).resolve() if geometry_root is not None else self.root)
         self.index=read_npy(self.root/"index.npy")
@@ -490,19 +491,28 @@ class SuperWingData(Dataset):
         self.configs=np.loadtxt(self.geometry_root/"configs.dat",skiprows=1,ndmin=2)
         require(self.index.ndim==2 and self.index.shape[1] in index_columns and len(self.index)>0,
                 f"SuperWing index must be non-empty with columns in {index_columns}")
-        require(self.configs.ndim==2 and self.configs.shape[1]==55,"configs.dat must have 55 numeric columns")
+        require(self.configs.ndim==2 and self.configs.shape[1] in config_columns,
+                f"configs.dat must have numeric columns in {config_columns}")
         require(self.centers.shape==(len(self.configs),3,128,256),"geom0 shape must be (G,3,128,256)")
         require(self.vertices.shape==(len(self.configs),3,129,257),"origingeom shape must be (G,3,129,257)")
         finite(self.index,"SuperWing index");finite(self.configs,"configs")
         self.shape_ids=integer_values(self.index[:,0],len(self.configs)-1,"shape index")
-        self.condition_ids=integer_values(self.index[:,1],7,"condition index")
+        single_case=self.configs.shape[1]==41
+        if single_case:
+            require(len(self.configs)==1 and len(self.index)==1,
+                    "Single-case configs requires exactly one geometry and one condition")
+            require(bool((self.index[0,:2]==0).all()),
+                    "Single-case shape_index and condition_index must both be 0")
+        self.condition_ids=integer_values(self.index[:,1],0 if single_case else 7,"condition index")
         self.original_ids=integer_values(self.configs[:,0],2**53-1,"original shape ID")
         require(len(np.unique(self.original_ids))==len(self.original_ids),"Duplicate original shape IDs")
         keys=list(zip(self.original_ids[self.shape_ids].tolist(),self.condition_ids.tolist()))
         require(len(set(keys))==len(keys),"Duplicate shape/condition samples")
-        require(np.allclose(self.index[:,2],self.configs[self.shape_ids,47+self.condition_ids],
+        aoa_columns=40 if single_case else 47+self.condition_ids
+        mach_columns=39 if single_case else 39+self.condition_ids
+        require(np.allclose(self.index[:,2],self.configs[self.shape_ids,aoa_columns],
                             rtol=0,atol=1e-8),"AoA does not match configs")
-        require(np.allclose(self.index[:,3],self.configs[self.shape_ids,39+self.condition_ids],
+        require(np.allclose(self.index[:,3],self.configs[self.shape_ids,mach_columns],
                             rtol=0,atol=1e-8),"Mach does not match configs")
         self.groups=self.original_ids[self.shape_ids]
         self.target=target
@@ -707,6 +717,18 @@ def protect_destination(destination,sources):
                 f"Output must not overwrite or be placed inside input data: {source}")
 
 
+def prediction_directory_available(path):
+    """Allow a new output directory or one containing only its format document."""
+    path=Path(path)
+    if not path.exists():
+        return not path.is_symlink()
+    if not path.is_dir():
+        return False
+    entries=list(path.iterdir())
+    return not entries or (len(entries)==1 and entries[0].name=="format.md" and
+                           entries[0].is_file() and not entries[0].is_symlink())
+
+
 def save_checkpoint(path,stage,model,spec,training_info,source_roots):
     path=Path(path).resolve();protect_destination(path,source_roots)
     require(not path.exists(),f"Checkpoint already exists; choose a new path: {path}")
@@ -770,8 +792,8 @@ def predict_directory(model,spec,checkpoint_info,input_root,output_root,device="
                           reynolds=reynolds,reynolds_file=reynolds_file)
     output_root=Path(output_root).resolve();protect_destination(output_root,[dataset.root])
     require(output_root not in dataset.root.parents,"Output cannot be an ancestor of input data")
-    require(not output_root.exists() or (output_root.is_dir() and not any(output_root.iterdir())),
-            f"Prediction directory must be empty: {output_root}")
+    require(prediction_directory_available(output_root),
+            f"Prediction directory must be empty or contain only a regular format.md file: {output_root}")
     require(batch_size>0,"batch_size must be positive")
     output_root.mkdir(parents=True,exist_ok=True)
     marker=output_root/"prediction_info.json"

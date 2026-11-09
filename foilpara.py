@@ -23,7 +23,7 @@ FOILPARA_ROOT = Path("D:/data/foilpara")
 
 
 class FoilParaData(m.SuperWingData):
-    """Native SuperWing files split across foiloc, foilgeo and foilsld.
+    """One geometry/condition with 41-column configs; no repeated Mach/AoA slots.
 
     ``sectional_cl.npy`` contains dimensionless local lift coefficients at the
     128 spanwise cell centers, in each sample's index order. It is not lift in
@@ -54,7 +54,7 @@ class FoilParaData(m.SuperWingData):
         super().__init__(
             self.condition_root, target="none", require_reynolds=require_reynolds,
             reynolds_file=self.reynolds_path if self.reynolds_path.is_file() else None,
-            geometry_root=self.geometry_root, index_columns=(6, 12))
+            geometry_root=self.geometry_root, index_columns=(6,), config_columns=(41,))
         m.require(bool((self.index[:, 4:6] > 0).all()),
                   "Foilpara reference half-area and half-span must be positive")
         if self.reynolds_array is not None:
@@ -103,8 +103,8 @@ def _destination(output_root, input_root):
     m.protect_destination(output_root, [input_root])
     m.require(output_root not in input_root.parents,
               "Foilpara output cannot be an ancestor of input data")
-    m.require(not output_root.exists() or (output_root.is_dir() and not any(output_root.iterdir())),
-              f"Prediction directory must be empty: {output_root}")
+    m.require(m.prediction_directory_available(output_root),
+              f"Prediction directory must be empty or contain only a regular format.md file: {output_root}")
     return output_root
 
 
@@ -205,20 +205,18 @@ def forward_test(device="cpu"):
             for directory in ("foiloc", "foilgeo", "foilsld"):
                 (root / directory).mkdir(parents=True)
             centers, vertices = m.synthetic_geometry()
-            configs = np.zeros((1, 55), dtype=np.float64)
+            configs = np.zeros((1, 41), dtype=np.float64)
             configs[0, 0] = 101
-            configs[0, 39:41] = [.75, .77]
-            configs[0, 47:49] = [2., 3.]
-            index = np.array([[0., 0., 2., .75, 1.5, 2.],
-                              [0., 1., 3., .77, 1.5, 2.]])
+            configs[0, 39:41] = [.75, 2.]
+            index = np.array([[0., 0., 2., .75, 1.5, 2.]])
             np.savetxt(root / "foilgeo" / "configs.dat", configs,
-                       header="Synthetic diagnostic, 55 native SuperWing columns", comments="")
+                       header="Synthetic single-case diagnostic, 41 columns", comments="")
             np.save(root / "foilgeo" / "geom0.npy", centers[None])
             np.save(root / "foilgeo" / "origingeom.npy", vertices[None])
             np.save(root / "foiloc" / "index.npy", index)
-            np.save(root / "foiloc" / "reynolds.npy", np.array([2e7, 2e7]))
+            np.save(root / "foiloc" / "reynolds.npy", np.array([2e7]))
             np.save(root / "foilsld" / "index.npy", index)
-            sld = np.stack([np.linspace(.4, .5, 128), np.linspace(.6, .7, 128)])
+            sld = np.linspace(.4, .5, 128)[None,:]
             np.save(root / "foilsld" / "sectional_cl.npy", sld)
             dataset = FoilParaData(root)
             try:

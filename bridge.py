@@ -243,8 +243,8 @@ def validate_prediction_job(job):
     for destination in destinations[:2]:
         require(paths["prediction_output"] not in destination.parents, "Result/claim cannot be inside prediction output")
     output = paths["prediction_output"]
-    require(not output.exists() or (output.is_dir() and not any(output.iterdir())),
-            f"Prediction output must be empty: {output}")
+    require(m.prediction_directory_available(output),
+            f"Prediction output must be empty or contain only a regular format.md file: {output}")
     return paths
 
 
@@ -465,7 +465,8 @@ def validate_job(job):
         require(paths["prediction_output"] not in artifact.parents, "Checkpoint/result/claim cannot be inside prediction output")
     require(not paths["checkpoint_out"].exists(), f"Checkpoint output already exists: {paths['checkpoint_out']}")
     output = paths["prediction_output"]
-    require(not output.exists() or (output.is_dir() and not any(output.iterdir())), f"Prediction output must be empty: {output}")
+    require(m.prediction_directory_available(output),
+            f"Prediction output must be empty or contain only a regular format.md file: {output}")
     return paths
 
 

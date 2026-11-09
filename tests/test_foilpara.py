@@ -8,7 +8,6 @@ import hashlib
 import io
 import json
 from pathlib import Path
-import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -22,16 +21,20 @@ import foilpara as f
 
 
 def foilpara_fixture(root, index_columns=6):
-    """Repackage a tiny native fixture without inventing a new numeric layout."""
+    """Select exactly one native geometry/case and save its 41-column layout."""
     native = wing_fixture(root.parent / (root.name + "_native"))
     for name in ("foiloc", "foilgeo", "foilsld"):
         (root / name).mkdir(parents=True)
-    index = np.load(native / "index.npy", allow_pickle=False)[:, :index_columns]
+    index = np.load(native / "index.npy", allow_pickle=False)[:1, :index_columns]
     np.save(root / "foiloc" / "index.npy", index)
     np.save(root / "foiloc" / "reynolds.npy", np.full(len(index), 2e7))
-    for name in ("configs.dat", "geom0.npy", "origingeom.npy"):
-        shutil.copy2(native / name, root / "foilgeo" / name)
-    sld = np.linspace(.35, .65, 128)[None, :] + np.arange(len(index))[:, None] * .025
+    configs = np.loadtxt(native / "configs.dat", skiprows=1, ndmin=2)
+    single = np.r_[configs[0, :39], index[0, 3], index[0, 2]][None, :]
+    np.savetxt(root / "foilgeo" / "configs.dat", single,
+               header="original_id geometry_parameters_1_to_38 mach aoa_deg", comments="")
+    for name in ("geom0.npy", "origingeom.npy"):
+        np.save(root / "foilgeo" / name, np.load(native / name, allow_pickle=False)[:1])
+    sld = np.linspace(.35, .65, 128)[None, :]
     np.save(root / "foilsld" / "sectional_cl.npy", sld)
     np.save(root / "foilsld" / "index.npy", index[:, :6])
     return root
@@ -86,7 +89,8 @@ class FoilParaTests(unittest.TestCase):
         root = foilpara_fixture(self.root / "input")
         before = source_hashes(root)
         dataset = f.FoilParaData(root)
-        self.assertEqual(len(dataset), 4)
+        self.assertEqual(len(dataset), 1)
+        self.assertEqual(np.loadtxt(root / "foilgeo" / "configs.dat", skiprows=1, ndmin=2).shape, (1, 41))
         expected = np.load(root / "foilsld" / "sectional_cl.npy")
         index = np.load(root / "foiloc" / "index.npy")
         for row in range(len(dataset)):
@@ -98,11 +102,61 @@ class FoilParaTests(unittest.TestCase):
             self.assertNotIn("target", sample)
         self.assertEqual(before, source_hashes(root))
 
-    def test_twelve_column_conditions_accept_only_the_original_first_six(self):
+    def test_foilpara_rejects_twelve_column_conditions(self):
         root = foilpara_fixture(self.root / "input", index_columns=12)
-        dataset = f.FoilParaData(root)
-        self.assertEqual(len(dataset), 4)
-        np.testing.assert_allclose(dataset[1]["conditions"], [.787, 2.7], rtol=1e-6)
+        self.assert_invalid(root)
+
+    def test_single_case_rejects_old_55_column_configs(self):
+        root = foilpara_fixture(self.root / "input")
+        path = root / "foilgeo" / "configs.dat"
+        single = np.loadtxt(path, skiprows=1, ndmin=2)[0]
+        legacy = np.r_[single[:39], np.full(8, single[39]), np.full(8, single[40])]
+        np.savetxt(path, legacy[None], header="legacy 55-column layout", comments="")
+        self.assert_invalid(root)
+
+    def test_single_case_cfd_preserves_twelve_columns_with_41_column_config(self):
+        root = foilpara_fixture(self.root / "input")
+        native = self.root / "input_native"
+        (native / "configs.dat").write_bytes((root / "foilgeo" / "configs.dat").read_bytes())
+        for name in ("index.npy", "geom0.npy", "origingeom.npy", "data.npy"):
+            path = native / name
+            np.save(path, np.load(path)[:1])
+        dataset = m.SuperWingData(native, target="field", require_reynolds=True, reynolds=2e7)
+        self.assertEqual(len(dataset), 1)
+        self.assertEqual(dataset.configs.shape, (1, 41))
+        self.assertEqual(dataset.index.shape, (1, 12))
+        np.testing.assert_allclose(dataset[0]["conditions"], [.78, 2.], rtol=1e-6)
+        self.assertEqual(tuple(dataset[0]["target"].shape), (3, 128, 256))
+
+    def test_single_case_rejects_second_geometry_or_condition(self):
+        for case in ("second_geometry", "second_condition", "nonzero_geometry_id", "nonzero_condition_id"):
+            with self.subTest(case=case):
+                root = foilpara_fixture(self.root / case)
+                if case == "second_geometry":
+                    path = root / "foilgeo" / "configs.dat"
+                    configs = np.loadtxt(path, skiprows=1, ndmin=2)
+                    second = configs.copy(); second[0, 0] += 1
+                    np.savetxt(path, np.concatenate((configs, second)), header="two geometries", comments="")
+                    for name in ("geom0.npy", "origingeom.npy"):
+                        path = root / "foilgeo" / name
+                        values = np.load(path)
+                        np.save(path, np.concatenate((values, values)))
+                elif case == "second_condition":
+                    index = np.load(root / "foiloc" / "index.npy")
+                    second = index.copy(); second[0, 1] = 1
+                    index = np.concatenate((index, second))
+                    np.save(root / "foiloc" / "index.npy", index)
+                    np.save(root / "foilsld" / "index.npy", index)
+                    np.save(root / "foiloc" / "reynolds.npy", np.full(2, 2e7))
+                    path = root / "foilsld" / "sectional_cl.npy"
+                    values = np.load(path)
+                    np.save(path, np.concatenate((values, values)))
+                else:
+                    index = np.load(root / "foiloc" / "index.npy")
+                    index[0, 0 if case == "nonzero_geometry_id" else 1] = 1
+                    np.save(root / "foiloc" / "index.npy", index)
+                    np.save(root / "foilsld" / "index.npy", index)
+                self.assert_invalid(root)
 
     def test_missing_required_files_are_rejected_without_database_fallback(self):
         names = (
@@ -115,14 +169,14 @@ class FoilParaTests(unittest.TestCase):
                 (root / name).unlink()
                 self.assert_invalid(root)
 
-    def test_sld_binding_rejects_reordered_or_changed_operating_conditions(self):
-        for case in ("reversed", "different_mach"):
+    def test_sld_binding_rejects_changed_case_identity_or_operating_conditions(self):
+        for case in ("different_condition", "different_mach"):
             with self.subTest(case=case):
                 root = foilpara_fixture(self.root / case)
                 path = root / "foilsld" / "index.npy"
                 index = np.load(path)
-                if case == "reversed":
-                    index = index[::-1]
+                if case == "different_condition":
+                    index[0, 1] = 1
                 else:
                     index[0, 3] += .01
                 np.save(path, index)
@@ -137,7 +191,7 @@ class FoilParaTests(unittest.TestCase):
                 if case == "short_span":
                     sld = sld[:, :127]
                 elif case == "missing_sample":
-                    sld = sld[:3]
+                    sld = sld[:0]
                 else:
                     sld[0, 0] = np.nan if case == "nan" else np.inf
                 np.save(path, sld)
@@ -151,7 +205,7 @@ class FoilParaTests(unittest.TestCase):
                 if case == "missing":
                     path.unlink()
                 else:
-                    values = np.full(3 if case == "short" else 4, 2e7)
+                    values = np.full(2 if case == "short" else 1, 2e7)
                     if case not in ("short",):
                         values[0] = {"zero": 0., "negative": -1., "nan": np.nan}[case]
                     np.save(path, values)
@@ -184,7 +238,7 @@ class FoilParaTests(unittest.TestCase):
                     model.prior(dict(batch, sld=value))
 
     def test_export_is_forward_only_finite_and_preserves_all_weights_and_sources(self):
-        root = foilpara_fixture(self.root / "input", index_columns=12)
+        root = foilpara_fixture(self.root / "input")
         # Invalid sentinels make accidental dependence on any source target
         # field fail, even if a source reader bypasses the np.load guard below.
         for folder in (root, root / "foiloc", root / "foilgeo", root / "foilsld"):
@@ -204,6 +258,9 @@ class FoilParaTests(unittest.TestCase):
             return original_load(path, *args, **kwargs)
 
         output = self.root / "output"
+        output.mkdir()
+        format_content = "# Output format\n\nPreserve this document during prediction.\n".encode("utf-8")
+        (output / "format.md").write_bytes(format_content)
         with patch.object(np, "load", side_effect=guarded_load), \
              patch.object(torch.optim, "Adam", side_effect=AssertionError("Prediction created Adam")), \
              patch.object(torch.optim, "SGD", side_effect=AssertionError("Prediction created SGD")), \
@@ -212,7 +269,7 @@ class FoilParaTests(unittest.TestCase):
              patch.object(model.lift, "forward", side_effect=AssertionError("Prediction ignored external SLD")):
             f.predict_foilpara(model, spec, info, root, output, batch_size=2)
         values = np.load(output / "data.npy", allow_pickle=False)
-        self.assertEqual(values.shape, (4, 3, 128, 256))
+        self.assertEqual(values.shape, (1, 3, 128, 256))
         self.assertEqual(values.dtype, np.float32)
         self.assertTrue(np.isfinite(values).all())
         np.testing.assert_array_equal(np.load(output / "index.npy"), np.load(root / "foiloc" / "index.npy")[:, :6])
@@ -229,6 +286,33 @@ class FoilParaTests(unittest.TestCase):
         self.assertFalse((output / "data.npy.partial").exists())
         self.assertEqual(before_weights, state_hash(model))
         self.assertEqual(before_sources, source_hashes(root))
+        self.assertEqual((output / "format.md").read_bytes(), format_content)
+
+    def test_output_directory_allows_only_a_regular_format_document(self):
+        self.assertTrue(m.prediction_directory_available(self.root / "new-output"))
+        empty = self.root / "empty"
+        empty.mkdir()
+        self.assertTrue(m.prediction_directory_available(empty))
+        documented = self.root / "documented"
+        documented.mkdir()
+        (documented / "format.md").write_text("# Format\n", encoding="utf-8")
+        self.assertTrue(m.prediction_directory_available(documented))
+        (documented / "data.npy").write_bytes(b"existing result")
+        self.assertFalse(m.prediction_directory_available(documented))
+        for name in ("other-file", "other-directory", "format-directory", "file-output"):
+            path = self.root / name
+            if name == "file-output":
+                path.write_text("not a directory", encoding="utf-8")
+            else:
+                path.mkdir()
+                if name == "other-file":
+                    (path / "notes.md").write_text("existing content", encoding="utf-8")
+                else:
+                    (path / ("format.md" if name == "format-directory" else "nested")).mkdir()
+            with self.subTest(case=name):
+                self.assertFalse(m.prediction_directory_available(path))
+                with self.assertRaises(ValueError):
+                    f._destination(path, self.root / "input")
 
     def test_export_requires_trained_checkpoint_metadata(self):
         root = foilpara_fixture(self.root / "input")
@@ -273,8 +357,8 @@ class FoilParaTests(unittest.TestCase):
         self.assertTrue(report["synthetic_only"])
         self.assertFalse(report["production_output_written"])
         self.assertEqual(report["prediction_kind"], "diagnostic_untrained")
-        self.assertEqual(report["wing_shape"], [2, 3, 128, 256])
-        self.assertEqual(report["index_shape"], [2, 6])
+        self.assertEqual(report["wing_shape"], [1, 3, 128, 256])
+        self.assertEqual(report["index_shape"], [1, 6])
         self.assertEqual(report["sld_source"], "external_foilsld_sectional_cl")
         self.assertEqual(torch.get_num_threads(), old_threads)
 
