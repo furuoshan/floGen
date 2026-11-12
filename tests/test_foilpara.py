@@ -106,6 +106,64 @@ class FoilParaTests(unittest.TestCase):
         root = foilpara_fixture(self.root / "input", index_columns=12)
         self.assert_invalid(root)
 
+    def test_mach_must_be_positive_in_index_and_config(self):
+        for case, index_mach, config_mach in (
+                ("zero", 0., 0.), ("negative", -.75, -.75),
+                ("nonpositive_config_within_match_tolerance", 1e-10, -1e-10)):
+            with self.subTest(case=case):
+                root = foilpara_fixture(self.root / case)
+                for folder in ("foiloc", "foilsld"):
+                    path = root / folder / "index.npy"
+                    index = np.load(path); index[0, 3] = index_mach
+                    np.save(path, index)
+                path = root / "foilgeo" / "configs.dat"
+                configs = np.loadtxt(path, skiprows=1, ndmin=2)
+                configs[0, 39] = config_mach
+                np.savetxt(path, configs, header="single-case configuration", comments="")
+                with self.assertRaisesRegex(ValueError, "Mach must be positive"):
+                    f.FoilParaData(root)
+
+    def test_raw_vertex_closure_cannot_cancel_during_span_averaging(self):
+        root = foilpara_fixture(self.root / "input")
+        path = root / "foilgeo" / "origingeom.npy"
+        vertices = np.load(path)
+        vertices[0, 0, :, -1] += 1e-3 * np.where(np.arange(129) % 2 == 0, 1., -1.)
+        # Adjacent endpoint errors cancel in the sectional averages. The raw
+        # vertex contours still violate the delivery contract and must fail.
+        section = .5 * (vertices[0, :, :-1] + vertices[0, :, 1:])
+        np.testing.assert_allclose(section[:, :, 0], section[:, :, -1], rtol=0, atol=1e-8)
+        self.assertFalse(np.allclose(vertices[0, :, :, 0], vertices[0, :, :, -1], rtol=0, atol=1e-8))
+        centers = .25 * (vertices[:, :, :-1, :-1] + vertices[:, :, 1:, :-1]
+                         + vertices[:, :, :-1, 1:] + vertices[:, :, 1:, 1:])
+        np.save(path, vertices)
+        np.save(root / "foilgeo" / "geom0.npy", centers)
+        dataset = f.FoilParaData(root)
+        try:
+            with self.assertRaisesRegex(ValueError, "close at every spanwise vertex station"):
+                dataset[0]
+        finally:
+            dataset.close()
+
+    def test_interior_span_reversal_is_rejected_with_valid_endpoints(self):
+        root = foilpara_fixture(self.root / "input")
+        path = root / "foilgeo" / "origingeom.npy"
+        vertices = np.load(path)
+        endpoints = vertices[0, 2, [0, -1], :].copy()
+        vertices[0, 2, 64, :] = vertices[0, 2, 62, :]
+        np.testing.assert_array_equal(vertices[0, 2, [0, -1], :], endpoints)
+        self.assertGreater(vertices[0, 2, -1, 0], vertices[0, 2, 0, 0])
+        self.assertFalse((np.diff(vertices[0, 2, :, 0]) > 0).all())
+        centers = .25 * (vertices[:, :, :-1, :-1] + vertices[:, :, 1:, :-1]
+                         + vertices[:, :, :-1, 1:] + vertices[:, :, 1:, 1:])
+        np.save(path, vertices)
+        np.save(root / "foilgeo" / "geom0.npy", centers)
+        dataset = f.FoilParaData(root)
+        try:
+            with self.assertRaisesRegex(ValueError, "strictly increase in z"):
+                dataset[0]
+        finally:
+            dataset.close()
+
     def test_single_case_rejects_old_55_column_configs(self):
         root = foilpara_fixture(self.root / "input")
         path = root / "foilgeo" / "configs.dat"

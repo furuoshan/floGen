@@ -7,6 +7,7 @@ test*
 !/tests/
 !/tests/*.py
 .DS_Store
+.deps/
 
 Calculation/
 *.npy
@@ -16,3 +17,4 @@ checkpoint_
 /weights/
 saves/
 cpsrc/
+/.ssh

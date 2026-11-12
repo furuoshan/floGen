@@ -270,6 +270,8 @@ class PhysicsEmbeddedWingPredictor(nn.Module):
             require(sld.shape == (b,j), "External SLD must be (B,128) sectional CL")
             require(bool(torch.isfinite(sld).all()), "Non-finite external sectional CL")
         else:
+            require(not getattr(self, "requires_external_sld", False),
+                    "This wing checkpoint requires external low-fidelity SLD")
             sld = self.lift(batch["parameters"],batch["conditions"])
         ma = batch["conditions"][:,0:1].expand(-1,j)*cos
         cl = sld/cos.square()
@@ -323,12 +325,14 @@ def geometry_features(centers, vertices):
     require(centers.shape == (3,128,256), "Expected SuperWing cell-center coordinates")
     require(vertices.shape == (3,129,257), "Expected origingeom.npy reference vertices")
     finite(centers,"geom0"); finite(vertices,"origingeom")
+    require(np.allclose(vertices[:,:,0],vertices[:,:,-1],rtol=0,atol=1e-8),
+            "SuperWing reference contour must close at every spanwise vertex station")
+    require(bool((np.diff(np.asarray(vertices[2],dtype=float),axis=0)>0).all()),
+            "Span stations must strictly increase in z")
     section = .5*(np.asarray(vertices[:,:-1],dtype=float)+np.asarray(vertices[:,1:],dtype=float))
     expected = .5*(section[:,:,:-1]+section[:,:,1:])
     require(np.allclose(expected,centers,rtol=0,atol=1e-8),
             "geom0 does not equal the four-vertex cell average")
-    require(np.allclose(section[:,:,0],section[:,:,-1],rtol=0,atol=1e-8),
-            "SuperWing reference contour must close at the final vertex")
     half_x = clustcos()
     y_features,queries,lower_masks,chords,quarters = [],[],[],[],[]
     for j in range(128):
@@ -762,7 +766,23 @@ def load_checkpoint(path,expected_stage=None):
     require(stage in constructors,"Unknown checkpoint stage")
     model=constructors[stage](spec)
     model.load_state_dict(payload["state_dict"],strict=True)
+    if stage == "wing":
+        model.requires_external_sld = payload["training"].get("sld_network_used") is False
     return model,spec,payload
+
+
+def validate_wing_priors(training, external_sld=False):
+    require(training.get("airfoil_training_steps", 0) > 0,
+            "Wing checkpoint must record a trained airfoil predecessor")
+    if training.get("sld_network_used") is False:
+        require(training.get("sld_source") == "pytornado_vlm" and
+                training.get("sld_uses_cfd") is False,
+                "External-SLD checkpoint must record geometry-only PyTornado provenance")
+        require(external_sld,
+                "This VLM-trained checkpoint requires external SLD; use predict-foilpara")
+    else:
+        require(training.get("sld_training_steps", 0) > 0,
+                "Wing checkpoint must record a trained SLD predecessor")
 
 
 def build_wing(airfoil_checkpoint,sld_checkpoint):
@@ -786,8 +806,7 @@ def predict_directory(model,spec,checkpoint_info,input_root,output_root,device="
             checkpoint_info.get("training",{}).get("training_steps",0)>0,
             "Prediction export requires a trained wing checkpoint")
     trained=checkpoint_info["training"]
-    require(trained.get("airfoil_training_steps",0)>0 and trained.get("sld_training_steps",0)>0,
-            "Wing checkpoint must record trained airfoil and SLD predecessors")
+    validate_wing_priors(trained)
     dataset=SuperWingData(input_root,target="none",require_reynolds=spec.condition_dim==3,
                           reynolds=reynolds,reynolds_file=reynolds_file)
     output_root=Path(output_root).resolve();protect_destination(output_root,[dataset.root])

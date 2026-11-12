@@ -55,6 +55,8 @@ class FoilParaData(m.SuperWingData):
             self.condition_root, target="none", require_reynolds=require_reynolds,
             reynolds_file=self.reynolds_path if self.reynolds_path.is_file() else None,
             geometry_root=self.geometry_root, index_columns=(6,), config_columns=(41,))
+        m.require(bool((self.index[:, 3] > 0).all() and (self.configs[:, 39] > 0).all()),
+                  "Foilpara Mach must be positive in both index.npy and configs.dat")
         m.require(bool((self.index[:, 4:6] > 0).all()),
                   "Foilpara reference half-area and half-span must be positive")
         if self.reynolds_array is not None:
@@ -174,8 +176,7 @@ def predict_foilpara(model, spec, checkpoint_info, input_root=FOILPARA_ROOT,
     m.require(checkpoint_info.get("format") == m.CHECKPOINT_FORMAT and
               checkpoint_info.get("stage") == "wing" and trained.get("training_steps", 0) > 0,
               "Foilpara prediction requires a trained v2 wing checkpoint")
-    m.require(trained.get("airfoil_training_steps", 0) > 0 and trained.get("sld_training_steps", 0) > 0,
-              "Wing checkpoint must record trained airfoil and SLD predecessors")
+    m.validate_wing_priors(trained, external_sld=True)
     dataset = FoilParaData(input_root, require_reynolds=spec.condition_dim == 3)
     try:
         return _export_foilpara(
