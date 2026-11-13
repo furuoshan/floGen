@@ -1,10 +1,10 @@
 # 官方 PyTornado 低保真展向升力估计
 
-当前默认的展向升力估计由 `low_fidelity_sld.py` 调用官方 PyTornado 原生 VLM 完成。输入只有机翼参考几何、Mach 与攻角，输出为单 case 的 `(1,128)` 无量纲截面 CL 和求解来源信息。它用于准备 `foilpara/foilsld/sectional_cl.npy`，不训练神经网络，不执行新的 CFD，也不使用参考 CFD 压力或摩擦场计算默认 SLD。
+当前默认的展向升力估计由 `low_fidelity_sld.py` 调用官方 PyTornado 原生 VLM 完成。输入只有机翼参考几何、Mach 与攻角，输出为单 case 的 `(1,128)` 无量纲截面 CL 和求解来源信息。它既用于准备 `foilpara/foilsld/sectional_cl.npy`，也用于当前三维训练的 VLM 缓存。SLD 求解本身不训练神经网络、不执行新的 CFD，也不使用参考 CFD 压力或摩擦场；三维训练读取它的结果作为固定低保真输入。
 
 ## 环境与官方求解器
 
-本机安装环境为 Conda `flogen`，Python 3.12，解释器为 `C:/Users/fff/miniconda3/envs/flogen/python.exe`；已安装 PyTornado 0.5.0。官方五个 C++ 源文件按原算法编译为本地 wheel，其涡格数学算法保持不变。围绕旧版本 Python 层及接口做的兼容处理包括现代 matplotlib 版本判断、`collections.abc`、Windows 的 C `long` 与 NumPy 2 整数类型匹配，以及移除依赖已废弃 `scipy.misc.derivative` 的导数调用方式。
+本机安装环境为 Conda `flogen`，Python 3.12，解释器为 `C:/Users/fff/miniconda3/envs/flogen/python.exe`；已安装 PyTornado 0.5.0。服务器同名环境使用 Python 3.11，原生扩展为独立的 Linux 构建，不能与本机 Windows wheel 混用。官方五个 C++ 源文件按原算法编译为本地 wheel，其涡格数学算法保持不变。围绕旧版本 Python 层及接口做的兼容处理包括现代 matplotlib 版本判断、`collections.abc`、Windows 的 C `long` 与 NumPy 2 整数类型匹配，以及移除依赖已废弃 `scipy.misc.derivative` 的导数调用方式。
 
 `low_fidelity_sld.py` 构造官方原生例程所需的几何与状态对象，实际依次调用：
 
@@ -43,6 +43,8 @@ python -c "import pytornado.aero.vlm; import pytornado.aero.c_vlm; print('PyTorn
 python -m pip check
 python -B superwing_io.py inspect --row 0
 ```
+
+服务器当前加载项目内 `.agent_runs/superwing_flogen_runtime/deps` 中的官方 CPython 3.11 原生扩展，使用 `/home/cvlab/miniconda3/envs/flogen/bin/python`，所有任务缓存均位于 `Projects/floGen`。完整服务器配置见 [IMPLEMENTATION.md](IMPLEMENTATION.md)。
 
 ## 从真实表面几何到弯度面
 
@@ -103,30 +105,29 @@ print(details)
 
 该命令打印参考 case 及默认 VLM 来源，不写生产文件。正式导出仍执行单 case 冲突预检，已有数据不会被此默认模式悄悄覆盖；完整交付命令见 [SUPERWING_IO.md](SUPERWING_IO.md)。网络 `predict-foilpara` 继续读取已经准备好的 `foilsld`，三通道输出的 `Cp、150×Cf_tau、300×Cf_z` 定义不变。
 
-## 已完成的数值与环境检查
+## 当前三维训练中的使用
 
-以下记录用于判断官方原生链路和数据隔离是否工作，不代表已获得跨声速 CFD 精度验证，也不代表已训练网络：
+`prepare_superwing_3d_training.py` 对选中的每条 SuperWing 工况计算这套相同 VLM，并存入 `sld.npy`；随后通过原后掠理论和冻结二维网络生成 `prior.npy`。三维训练只更新 residual，缓存文件及二维权重通过 SHA-256 绑定。它没有训练 SLD FNN，也没有在训练期间改换 VLM 网格、压缩性模型或插值方法。
 
-| 检查 | 实际结果 |
+单算例纯预测仍读取已经准备好的 `foilsld`；读取、交付和训练缓存是三个调用场景，求解算法都在同一个 `low_fidelity_sld.py` 中。当前完整三维检查点记录 `sld_source=pytornado_vlm`、`sld_network_used=False` 和 `sld_uses_cfd=False`。作者三种方案——纯 VLM、FNN 直接预测、FNN 预测 `CFD_CL−VLM_CL` 后加回 VLM——均保留，来源与 `ref_type=1/2/3` 对应关系见 [IMPLEMENTATION.md](IMPLEMENTATION.md)。当前只使用纯 VLM；不能把参考 CFD 积分或 FNN 输出误标为 PyTornado，也不把保留的 FNN 算法当作已有训练权重。
+
+## 数值回归与范围
+
+[tests/test_low_fidelity_sld.py](tests/test_low_fidelity_sld.py) 使用真实官方原生后端检查以下行为，不用模拟输出替代 VLM：
+
+| 检查 | 需要保持的行为 |
 |---|---|
 | 平直对称翼、零攻角 | 升力接近零 |
-| 正 4° 攻角的规则测试翼 | 升力为正；每半翼展向面板 16/32/64 时，总 CL 约为 0.26312 / 0.26430 / 0.26482 |
-| 最后两档网格差异 | 32 与 64 档约 0.1962%，为该测试翼的网格收敛检查 |
-| CFD 场隔离 | 将真实参考样本表面场变为原值的 3 倍再加 7，不改变 VLM SLD |
-| 无 CFD 场的几何估计 | 完全没有 `data.npy` 的几何输入仍可完成估计 |
-| 官方 Python 层导入与翼型辅助函数 | `pytornado.aero.vlm` 可导入；NACA 2412 弯度线角度计算有限；不等同于完整高层飞机 JSON 工作流已验收 |
-| 依赖一致性 | Conda `flogen` 中 `pip check` 未报告损坏依赖 |
-| 最终联合回归 | 5 项低保真数值测试、14 项单 case I/O 测试、16 项三目录测试，共 35 项通过，耗时 7.647 秒 |
+| 规则测试翼、正攻角 | 升力为正；细化展向面板时结果收敛 |
+| 不存在 CFD 场文件 | 仅几何和工况仍能计算 SLD |
+| 改写临时副本中的参考 CFD 场 | 几何/工况相同则 VLM 结果不变 |
+| 来源元数据 | 记录官方后端、网格、坐标映射和 CFD 隔离标志 |
 
-真实 SuperWing 原库第 0 条样本的默认 VLM 结果已在工作区 `build/superwing-vlm-case-000000` 准备，截面 CL 范围为 `0.0207139130933328` 到 `0.38946191021690857`。此例 VLM 的全翼归一化总 CL 约 `0.3137224186901063`，其半翼参考面积由弯度面条带得到，约 `1.703959304`；此值不应与使用另一参考面积的 CFD 系数直接作等价比较。SLD 的少量展向位置示例如下，表头只用于阅读，文件实际保存完整 `(1,128)` 二进制数组：
+```powershell
+conda activate flogen
+python -B -m unittest discover -s tests -p test_low_fidelity_sld.py -v
+```
 
-| 唯一样本 n | 展向位置 j | sectional_cl[0,j] | 来源 |
-|---:|---:|---:|---|
-| 0 | 0 | 0.367235960520544 | 官方 PyTornado VLM |
-| 0 | 1 | 0.367235960520544 | 官方 PyTornado VLM |
-| 0 | 64 | 0.28938470423069523 | 官方 PyTornado VLM |
-| 0 | 127 | 0.0207139130933328 | 官方 PyTornado VLM |
+规则测试翼的参考收敛记录中，4° 攻角、每半翼 16/32/64 个展向面板时，面积加权总 CL 约为 0.26312 / 0.26430 / 0.26482；这些数值说明该测试几何的势流计算行为，不代表 SuperWing 跨声速黏性 CFD 的误差水平。
 
-当前 `D:/data` 的第 0 个单 case 已实际切换为该 VLM SLD：只替换 `foilpara/foilsld/sectional_cl.npy` 和四个已交付叶目录的 `source_case.json`，旧文件备份位于 `build/vlm-sld-refresh-backup`。新共同 `export_id` 为 `50e05c44a1694a47b97155399cacea95`，来源为 `pytornado_vlm`，`sld_requires_cfd` 与 `reference_sld_uses_cfd` 为 false。几何、工况和 CFD 文件的 SHA256 均保持不变；读回 10 个数值文件、两个 41 列配置、输入/CFD 加载器及共同导出身份检查通过。
-
-本轮没有新运行 CFD、没有训练网络，也没有以未提供的检查点生成网络预测。此交付结果说明默认几何驱动 SLD 与单 case 文件链路已运行；完整高层飞机定义工作流、跨声速预测精度及生产设计有效性仍不能仅凭这些检查推断。
+原生求解链路和单算例交付正确，不等同于完整高层 PyTornado 飞机 JSON API 已完成验收，也不等同于网络预测在任意几何/工况下都准确。生产文件的实际来源应读取各 case 的 `source_case.json`，不依赖文档中某次历史导出的临时目录或 export_id。

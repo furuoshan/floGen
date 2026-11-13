@@ -194,21 +194,10 @@ CFD 目录的 `running_info.jsonl` 只写本单 case 的 Re 日志：`running_id
 
 来源数据的抽取与数值格式正确不等于新 CFD 工程已就绪。参考翼面坐标是展开的参考表面网格，实际 CFD 所需的确定性根尖封口、水密与正体积检查、体网格质量、边界条件、尺度、物性及求解配置仍需按几何叶目录说明验收。该工具不会运行这些新求解步骤，不改动 `D:/Superwing`，也不把短诊断或参考真值泄漏的结果称为盲预测精度。
 
+## 当前检查点与验证范围
 
-## 历史单 case 导出验证记录（VLM 默认接入之前）
+`superwing_io.py export --checkpoint ...` 在交付几何、工况、SLD 和参考 CFD 之后，通过正式三目录入口进行真实网络前向，因此支持记录了 PyTornado 外部 SLD 来源的当前三维检查点。该路径与 `main.py predict` 的原生库旧接口不同，不能因二者都读取 SuperWing 数据就互换使用。没有 `--checkpoint` 时只交付参考输入/真值，不产生网络预测。
 
-- 新增接口回归测试 12 项全部通过；测试不训练模型。
-- 实际只读提取 SuperWing 第 0 条样本，先在工作区示例目录导出，再交付至 D:/data 现有输入及 CFD 目录，保留各目录 format.md。
-- 读回核对 10 个数值数组，与源样本/参考积分结果逐值一致；两个 configs.dat 的完整表头与数值行均为 41 项。
-- FoilParaData 与 CFD SuperWingData 均能正确读回，四个实际写入叶目录具有相同 export_id。
-- 本次没有提供三维检查点，没有生成网络预测，没有新运行 CFD，没有训练网络，也没有改写 SuperWing 原库。
+当前三维任务与二维前序权重见 [IMPLEMENTATION.md](IMPLEMENTATION.md)，生产输入/输出完整协议见 [FOILPARA.md](FOILPARA.md)。模型运行状态、训练完成轮数及检查点 SHA 应读取真实文件，不通过此文档固定某个运行中的 epoch。
 
-这组历史记录中的 SLD 为当时的参考 CFD 积分结果，不是当前默认 PyTornado VLM 的运行记录。当前原生 VLM 数值检查与限制见 [PYTORNADO.md](PYTORNADO.md)；新一轮实际交付状态以本轮 `source_case.json` 为准。
-
-## 当前默认 VLM 的实际交付记录
-
-已在 Conda `flogen` 环境完成官方原生 VLM 的 5 项数值检查，并与 14 项单 case I/O 和 16 项三目录测试联合运行，35 项全部通过，耗时 7.647 秒。完整物理假设与数值结果见 `PYTORNADO.md`。
-
-真实 SuperWing 第 0 个 case 的 VLM 输出已先在 `build/superwing-vlm-case-000000` 准备，再更新至 `D:/data`：仅替换 `foilpara/foilsld/sectional_cl.npy` 和四个实际写入叶目录的 `source_case.json`，其余几何、工况和 CFD 文件 SHA256 保持不变。旧来源与 SLD 备份保存在 `build/vlm-sld-refresh-backup`。共同导出身份为 `50e05c44a1694a47b97155399cacea95`，来源 `pytornado_vlm`，`sld_requires_cfd=false`、`reference_sld_uses_cfd=false`。最终读回 10 个数值文件、41 列配置、输入与 CFD 加载器及共同身份校验通过。
-
-该 case 的 VLM 截面 CL 范围为 `0.0207139130933328～0.38946191021690857`；它属于几何驱动的低保真估计，暴露翼根镜像不包含中心翼段或机身干扰。没有提供三维检查点，没有生成网络预测，没有新执行 CFD 或训练网络。
+回归范围包括原始行号与局部编号的区分、41/55 列配置、6/12 列索引、Re 关联、来源身份共享、只读源数组、全部目标统一冲突预检，以及 VLM/外部提供/CFD 参考积分三种 SLD 来源的区分。对应 [tests/test_superwing_io.py](tests/test_superwing_io.py)、[tests/test_foilpara.py](tests/test_foilpara.py) 和 [tests/test_low_fidelity_sld.py](tests/test_low_fidelity_sld.py)。物理低保真假设和数值例子集中在 [PYTORNADO.md](PYTORNADO.md)。

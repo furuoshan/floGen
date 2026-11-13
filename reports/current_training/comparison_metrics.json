@@ -1,0 +1,290 @@
+{
+  "created_utc": "2026-11-12T06:51:58.378020+00:00",
+  "checkpoint": "D:\\floGen\\weights\\3d\\superwing_200_bs8_20261111_190048\\checkpoints\\epoch_090.pt",
+  "epoch": 90,
+  "checkpoint_sha256": "345d05d00dc98eff5a91f40734e462b4a9b3f295be81099638443814aa4a3488",
+  "download_manifest_sha256_verified": true,
+  "optimizer_steps_performed": 0,
+  "model_state_unchanged": true,
+  "checkpoint_file_unchanged": true,
+  "source_dataset_read_only": true,
+  "comparison_plot": "D:\\floGen\\reports\\current_training\\checkpoint_comparison.png",
+  "section_j": 64,
+  "cases": [
+    {
+      "source_row": 3248,
+      "geometry_index": 452,
+      "original_id": 456,
+      "selection": "seed42_random_test_row",
+      "test_membership_confirmed": true,
+      "mach": 0.7788669985,
+      "aoa_deg": 10.1905921888,
+      "reynolds": 20000000.0,
+      "metrics_entire_surface": {
+        "Cp": {
+          "nmae_range_percent": 0.5492932378806327,
+          "relative_l1_percent": 3.2289936524435987,
+          "physical_mae": 0.013961974930496376
+        },
+        "Cf_tau": {
+          "nmae_range_percent": 0.4279464096281635,
+          "relative_l1_percent": 2.4545138707366183,
+          "physical_mae": 6.265323455810398e-05
+        },
+        "Cf_z": {
+          "nmae_range_percent": 0.4002129122111456,
+          "relative_l1_percent": 6.556557427299013,
+          "physical_mae": 3.0364251184665145e-05
+        }
+      },
+      "source_selected_arrays_unchanged": true,
+      "vlm": {
+        "solver": "pytornado",
+        "version": "0.5.0",
+        "backend": "official_native_c_vlm",
+        "method": "incompressible_horseshoe_vortex_lattice",
+        "uses_cfd": false,
+        "chord_panels": 4,
+        "span_panels_per_half": 32,
+        "total_panels": 256,
+        "total_cl": 0.44828669709136815,
+        "mach": 0.7788669985,
+        "aoa_deg": 10.1905921888,
+        "compressibility_correction": "none",
+        "camber_surface": "mean_of_lower_and_upper_at_equal_local_x_over_c",
+        "symmetry_plane_original_z": 0.3338679373264313,
+        "symmetry": "exposed_root_plane",
+        "coordinate_mapping": "original_x_yheight_zspan_to_vlm_x_yspan_zheight",
+        "output_quantity": "dimensionless_sectional_cl_before_sweep_transform",
+        "output_shape": [
+          1,
+          128
+        ],
+        "interpolation": "physical_span_linear_root_symmetric_tip_zero",
+        "reference_half_area_from_camber_chords": 2.150587325737006,
+        "limitations": "potential-flow thin-wing estimate; no shocks, separation or viscous effects"
+      }
+    },
+    {
+      "source_row": 18918,
+      "geometry_index": 2751,
+      "original_id": 2773,
+      "selection": "worst_whole_surface_cp_nmae_at_selected_checkpoint",
+      "test_membership_confirmed": true,
+      "mach": 0.8976608771,
+      "aoa_deg": 3.3474631283,
+      "reynolds": 20000000.0,
+      "metrics_entire_surface": {
+        "Cp": {
+          "nmae_range_percent": 1.941524677160626,
+          "relative_l1_percent": 12.62002226863653,
+          "physical_mae": 0.04601469735938506
+        },
+        "Cf_tau": {
+          "nmae_range_percent": 1.3134089333327021,
+          "relative_l1_percent": 7.2012318673744655,
+          "physical_mae": 0.00016450077613140729
+        },
+        "Cf_z": {
+          "nmae_range_percent": 1.6874913281875987,
+          "relative_l1_percent": 16.67327108984832,
+          "physical_mae": 7.549758648245517e-05
+        }
+      },
+      "source_selected_arrays_unchanged": true,
+      "vlm": {
+        "solver": "pytornado",
+        "version": "0.5.0",
+        "backend": "official_native_c_vlm",
+        "method": "incompressible_horseshoe_vortex_lattice",
+        "uses_cfd": false,
+        "chord_panels": 4,
+        "span_panels_per_half": 32,
+        "total_panels": 256,
+        "total_cl": -0.09585986724602708,
+        "mach": 0.8976608771,
+        "aoa_deg": 3.3474631283,
+        "compressibility_correction": "none",
+        "camber_surface": "mean_of_lower_and_upper_at_equal_local_x_over_c",
+        "symmetry_plane_original_z": 0.31896883249282837,
+        "symmetry": "exposed_root_plane",
+        "coordinate_mapping": "original_x_yheight_zspan_to_vlm_x_yspan_zheight",
+        "output_quantity": "dimensionless_sectional_cl_before_sweep_transform",
+        "output_shape": [
+          1,
+          128
+        ],
+        "interpolation": "physical_span_linear_root_symmetric_tip_zero",
+        "reference_half_area_from_camber_chords": 1.8419843642229417,
+        "limitations": "potential-flow thin-wing estimate; no shocks, separation or viscous effects"
+      }
+    }
+  ],
+  "aggregate_test_from_checkpoint": {
+    "test_samples": 2885,
+    "surface_cells": 32768,
+    "normalized_mse": 3.380611627256086e-05,
+    "metric_definitions": {
+      "nmae_range_percent": "100*mean(abs(prediction-reference))/(max(reference)-min(reference)), per complete sample surface and channel",
+      "relative_l1_percent": "100*sum(abs(prediction-reference))/sum(abs(reference)), per sample surface and channel",
+      "distribution_range_error_percent": "100*abs(range(prediction)-range(reference))/range(reference)",
+      "error_range_percentage_points": "maximum sample error percentage minus minimum sample error percentage",
+      "normalized_mse": "MSE after the fixed training-only target min/max transform",
+      "zero_denominator_policy": "Undefined percentages are null, excluded from percentage summaries and counted; no epsilon substitution",
+      "physical_cf_units": "stored Cf_tau/150 and stored Cf_z/300; all coefficients are dimensionless"
+    },
+    "test_used_for_parameter_updates": false,
+    "normalizers_fitted_here": false,
+    "cp": {
+      "nmae_range_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 0.7137813412273509,
+        "minimum": 0.28468785619437353,
+        "maximum": 1.9395547073392116,
+        "error_range_percentage_points": 1.6548668511448381,
+        "p50": 0.6882061542466925,
+        "p95": 1.0780716775590642,
+        "p99": 1.3174117474247087,
+        "minimum_source_row": 12372,
+        "maximum_source_row": 18918
+      },
+      "relative_l1_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 4.645877756987471,
+        "minimum": 2.2872200394563413,
+        "maximum": 13.478800278787515,
+        "error_range_percentage_points": 11.191580239331174,
+        "p50": 4.390574545698985,
+        "p95": 7.045186855176718,
+        "p99": 8.916432948981825,
+        "minimum_source_row": 12372,
+        "maximum_source_row": 18906
+      },
+      "distribution_range_error_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 1.2563818354936147,
+        "minimum": 0.00048481170326636927,
+        "maximum": 11.56440965097353,
+        "error_range_percentage_points": 11.563924839270264,
+        "p50": 0.9839183971040633,
+        "p95": 3.301732861164212,
+        "p99": 5.039011306407574,
+        "minimum_source_row": 27213,
+        "maximum_source_row": 3089
+      },
+      "stored_mae": 0.016537361791604168,
+      "stored_rmse": 0.028894806370084895,
+      "physical_mae": 0.016537361791604168,
+      "physical_rmse": 0.028894806370084895,
+      "stored_multiplier": 1.0,
+      "physical_unit": "Cp"
+    },
+    "cf_tau": {
+      "nmae_range_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 0.4597861066117109,
+        "minimum": 0.18493077227121998,
+        "maximum": 1.8576391819737337,
+        "error_range_percentage_points": 1.6727084097025138,
+        "p50": 0.4317721997704616,
+        "p95": 0.764451079411909,
+        "p99": 0.9738159121231921,
+        "minimum_source_row": 12842,
+        "maximum_source_row": 2137
+      },
+      "relative_l1_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 2.5131667235010915,
+        "minimum": 0.9400248467257394,
+        "maximum": 11.944514334622239,
+        "error_range_percentage_points": 11.0044894878965,
+        "p50": 2.3173120197961437,
+        "p95": 4.278187890659692,
+        "p99": 5.7164338973104165,
+        "minimum_source_row": 11792,
+        "maximum_source_row": 2137
+      },
+      "distribution_range_error_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 1.4790051562316633,
+        "minimum": 0.00027387617067445975,
+        "maximum": 16.867337813919306,
+        "error_range_percentage_points": 16.867063937748632,
+        "p50": 1.1349632077441374,
+        "p95": 4.097690670523969,
+        "p99": 6.865665203145701,
+        "minimum_source_row": 16563,
+        "maximum_source_row": 9014
+      },
+      "stored_mae": 0.009524110493458027,
+      "stored_rmse": 0.022295914540835647,
+      "physical_mae": 6.349406995638685e-05,
+      "physical_rmse": 0.00014863943027223765,
+      "stored_multiplier": 150.0,
+      "physical_unit": "Cf_tau"
+    },
+    "cf_z": {
+      "nmae_range_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 0.6256849228806027,
+        "minimum": 0.27905988469678744,
+        "maximum": 2.311622909060222,
+        "error_range_percentage_points": 2.0325630243634345,
+        "p50": 0.5810977467563999,
+        "p95": 1.0154354754179564,
+        "p99": 1.3351508239393708,
+        "minimum_source_row": 1732,
+        "maximum_source_row": 15834
+      },
+      "relative_l1_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 8.935473442820662,
+        "minimum": 4.83068935437145,
+        "maximum": 25.696824291441246,
+        "error_range_percentage_points": 20.866134937069795,
+        "p50": 8.539827271811172,
+        "p95": 13.056586457988413,
+        "p99": 16.51202261015383,
+        "minimum_source_row": 3241,
+        "maximum_source_row": 2137
+      },
+      "distribution_range_error_percent": {
+        "valid_samples": 2885,
+        "undefined_samples": 0,
+        "undefined_source_rows": [],
+        "mean": 2.8568012316244653,
+        "minimum": 0.0027025984077977037,
+        "maximum": 28.821474685359217,
+        "error_range_percentage_points": 28.81877208695142,
+        "p50": 2.191733920179824,
+        "p95": 7.799810312059359,
+        "p99": 12.676589872756905,
+        "minimum_source_row": 7467,
+        "maximum_source_row": 28541
+      },
+      "stored_mae": 0.010406354021208966,
+      "stored_rmse": 0.02160061665534706,
+      "physical_mae": 3.4687846737363224e-05,
+      "physical_rmse": 7.200205551782354e-05,
+      "stored_multiplier": 300.0,
+      "physical_unit": "Cf_z"
+    }
+  },
+  "local_recalculation_note": "Official VLM and complete network rerun locally on CPU; minor floating-point differences versus server GPU cached-prior metrics are possible."
+}

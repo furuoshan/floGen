@@ -1,223 +1,154 @@
-# 物理嵌入式三维预测入口：结构分析、论文映射与运行说明
+# 物理嵌入三维预测：结构、训练与运行
 
-## 2026-11-09：按 readforagent 补齐输入与只前向测试
+当前实现将已训练并冻结的二维翼型模型、官方 PyTornado 几何驱动低保真 SLD 和三维残差网络组合。正式输入输出采用 [FOILPARA.md](FOILPARA.md) 的单算例协议；训练使用原生 SuperWing 数据库，不改变该生产接口。
 
-当前指定入口为 `python main.py predict-foilpara`，默认从 `D:/data/foilpara`
-下的 `foiloc / foilgeo / foilsld` 读取数据，输出到
-`D:/data/foilperf/network`。详细文件协议和命令见 [FOILPARA.md](FOILPARA.md)。
-该入口将外部估计的截面 CL 直接传入物理迁移过程，不调用内部 SLD 网络替代。
-旧 `predict` 命令和 `bridge.py` 保持原接口，仍供已有 SuperWing / 多智能体桥接流程使用。
+## 当前训练任务与已有权重
 
-本轮遵循“三维先只测试不训练”：新增 `python main.py test-3d`，
-仅进行临时合成输入的三维前向与导出格式检查，优化步数为零。
-下文旧 `smoke-test`、`train-sld`、`train-3d` 及其历史验证记录供后续使用，
-不是本轮执行的三维工作。
+二维已完成 60 轮训练，当前权重为 `weights/2d/latest.pt`，SHA-256 为 `e4ae5a3daa5a1d5b2c6cc025882c6a535e09eee156172f42d3e7ede1a9e295ee`。三维任务使用它的同哈希服务器副本。二维结构和训练记录见 [MODEL_2D.md](MODEL_2D.md)。
 
-已只读检查真实 SuperWing 与 SuperFoil VT-GU 元数据，并在 VT-GU 上执行
-一次二维诊断优化步。诊断检查点位于
-`checkpoints/diagnostics/airfoil_vt_gu_20261109_1step.pt`，不能作为充分训练或精度验收的模型。
-尚未完成论文的 300 轮二维训练，也没有训练三维模型或发布生产预测。
-本轮三维验证的详细结果见 `FOILPARA.md`。
+当前三维任务由 [build/superwing_200_bs8_config.json](build/superwing_200_bs8_config.json) 指定，run ID 为 `superwing_200_bs8_20261111_190048`。本任务重新初始化三维 residual 和 Adam，从第 0 轮开始训练；二维权重继续冻结，SLD 采用 VLM。
 
-论文架构的边界：当前三维实现沿用三个独立单通道解码器；论文附录 A2
-文字描述的是一个解码器最终输出三通道。这是已有实现的架构差异，
-本轮为保持 v2 检查点兼容而保留，不将其描述为逐层完全复现论文。
-
-## 依据
-
-阅读的本地论文为桌面 md 目录中的：
-
-2025_AIAAJ_基于物理嵌入式迁移学习的后掠翼快速气动预测.md
-
-对应 Yang 等的 Rapid aerodynamic prediction of swept wings via physics-embedded transfer learning，AIAA Journal 63(6), 2545–2559，2025，DOI 10.2514/1.J064576。同时查看了附录 A1、A2、A4 的网络图。
-
-本次实现是按现有 SuperFoil / SuperWing 数据接口适配该方法，不宣称复现原论文的训练误差、训练数据规模或精度结论。没有可直接加载的本地预训练权重，本次没有启动完整数据集的数百轮训练。
-
-## floGen 结构
-
-| 位置 | 职责及本次使用方式 |
+| 项目 | 当前任务设置 |
 |---|---|
-| flowvae/base_model/conv.py | 一维卷积编码器、插值卷积解码器和 U-Net 跳跃连接；用于二维预训练 |
-| flowvae/base_model/resnet.py | ResNet 编码器、解码器和 U-Net；用于三维修正 |
-| flowvae/base_model/mlp.py | MLP 构造器；用于 SLD 三分支模型 |
-| flowvae/vae.py | 条件编码器/解码器与 U-Net；用于二维条件预测 |
-| flowvae/dataset.py | 旧数据集封装，倾向一次读入数据；新入口改用原格式只读内存映射 |
-| flowvae/post.py | 顶点法向、面积、摩擦基底与表面力积分；用于 SLD 训练标签 |
-| flowvae/ml_operator/ | 训练循环、交叉验证、模型配置与权重加载 |
-| flowvae/app/wing/models.py | 包含论文使用的模型构造及后续模型；顶层还导入 Transformer 等可选依赖 |
-| flowvae/app/wing/api.py | 原有机翼 API 和物理变换；依赖 cfdpost/CST 建模及旧模型配置 |
-| examples/wing/run_kfold.py | 论文训练脚本，使用旧路径、旧参数切片和 101×321 网格 |
-| main.py | 本次新增：三个模型、物理迁移、只读数据接口、训练、检查点与导出 |
-| tests/test_main.py | 本次新增：网络、物理变换、训练和跨项目文件兼容测试 |
+| 数据 | SuperWing 原生 4,239 个几何、28,856 条工况记录 |
+| 固定 train / test | 25,965 / 2,885；精确 9∶1，几何身份无交集 |
+| 未纳入 | 固定的 6 条训练侧余数记录；源数组保持不变 |
+| 训练总轮数 | 200 |
+| train / test batch size | 8 / 4 |
+| 优化更新 | 每轮 3,246 次，最后训练批为 5 个样本 |
+| 优化器与精度 | Adam，仅优化 residual；FP32，AMP=none |
+| 学习率 | 基准最大值 `1e-4`；前 60 轮线性预热 `1e-5→1e-4`，之后每轮乘 `0.95^(1/3)` |
+| test | 每个完整 epoch 后评估全部 2,885 条，不更新参数、归一化范围或学习率 |
+| 检查点选择 | 最后完成一轮的权重，不根据 test 回滚最佳轮 |
+| 独立保留与下载 | 第 10、20、…、200 轮各一个检查点，下载到本机后校验 SHA-256 和文件大小 |
+| 曲线与日志 | 每轮更新 train/test loss 和 test 百分比误差曲线 |
 
-复用底层模块，避免让新入口依赖 CFD 几何生成工具或无关 Transformer 依赖。旧训练脚本的 load_encoder_decoder 导入已改为 flowvae.app.multipoint.models，其余旧训练接口问题不由新入口隐式修补。三维分支直接组合原有 ResNet U-Net 编解码器；没有沿用当前 BranchUnet 包装器中访问不存在 decoder 属性的路径。
+固定 9∶1 拆分按完整几何分组，而非随机打散同一机翼不同工况；seed=42，精确比例所需余数通过固定 seed=43 选择。当前不是原官方训练列表加内部验证的旧划分。所有归一化范围只从 train 拟合；test 不参与拟合、优化或检查点选择。
 
-## 论文到代码的映射
+任务进度会变化，应查询 `status.json` 或监督状态，不能把此文档中的目标 200 轮当作已完成记录。
 
-### 二维翼型模型
+## 核心代码职责
 
-附录 A1 的一维卷积 U-Net：三组编码通道为 16、32、64，潜变量为 32 维；与工况拼接后，经过 64、128 维全连接层连接解码器。解码通道为 512、256、128、64，最终输出两个通道。
+| 文件 | 职责 |
+|---|---|
+| [main.py](main.py) | 模型定义、物理迁移、原生数据库适配、检查点加载和通用 CLI |
+| [foilpara.py](foilpara.py) | 三目录单算例输入、外部 SLD 前向、网络结果导出 |
+| [low_fidelity_sld.py](low_fidelity_sld.py) | 官方 PyTornado 原生 VLM 及几何/展向映射 |
+| [prepare_superwing_3d_training.py](prepare_superwing_3d_training.py) | 几何分组 9∶1 拆分、真实 Re、VLM 与冻结二维先验缓存 |
+| [train_3d_train_test.py](train_3d_train_test.py) | 当前三维训练、逐轮 test、曲线、可恢复权重与十轮快照 |
+| [build/run_superwing_200_server.py](build/run_superwing_200_server.py) | 项目内远端派发、断线重连及校验后下载检查点 |
+| [build/launch_superwing_bs8.py](build/launch_superwing_bs8.py) | 从 PyCharm subprocess 启动当前任务监督器，防止重复派发 |
+| [build/check_superwing_bs8_progress.py](build/check_superwing_bs8_progress.py) | 只读查询当前 batch size 8 任务的远端进度 |
+| `flowvae/base_model/conv.py`、`flowvae/vae.py` | 二维条件卷积 U-Net 底层实现 |
+| `flowvae/base_model/resnet.py` | 三维表面残差网络的 ResNet U-Net 编解码器 |
 
-原论文为 321 个点；适配 SuperFoil 的 401 个点后，编码特征长度变为 100、24、5，解码恢复为 401。数据接口接收原始 y/c、工况和 Cp、1000×Cf；网络内部按训练集各变量的最小值和最大值归一化，预测后还原为原存储单位。
+原有 SLD FNN、`main.py train-sld/train-3d` 和桥接功能继续保留。当前训练不调用 SLD FNN，不使用 CFD 场生成 SLD；保留类和参数并不表示这些参数在当前任务中受过训练。
 
-完整论文工况为 Mach、CL、Re。用户已确认二维数据根目录为 D:/Superfoil，真实雷诺数为 2×10^7，因此该目录和 Re=20000000 已设为二维默认配置。Re 在网络内以“百万”为单位表示，第三工况值为 20，仅为数值单位转换。SuperFoil VT 原文件没有 Re 列，不会把这个配置写回源数据。
+## 几何、后掠理论与二维先验
 
-- 默认 condition-dim=3，保留 Mach、CL、Re 三个工况；未传入覆盖参数时，二维适配器采用用户确认的 Re=2e7。
-- --reynolds 接受实际 Reynolds 数，并显式覆盖二维默认值。
-- --reynolds-file 接受 (N,) NPY，顺序与对应子集 index.npy 相同；显式文件优先于缺省常数，不能与显式 --reynolds 同时使用。
-- condition-dim=2 仍是仅供显式选择的 Mach/CL 变体；默认流程不省略 Re。
-- --foil-root 默认 D:/Superfoil，可显式指定其他原格式目录；训练仍需通过 --foil-subset 明确选择 VT-BUF、VT-DD 或 VT-GU。
-- 二维检查点记录 Re 的来源及数值或文件路径，三维检查点保留前序二维模型的这项配置。此默认值仅属于二维适配器；三维 Re 继续使用显式参数、显式文件或原始日志，截面的有效 Re 仍按论文物理变换计算。
+几何网格为单元中心 `3×128×256` 和顶点 `3×129×257`；坐标为 `[x,y高度,z展向]`。`geometry_features` 从真实顶点构造各截面局部弦坐标，沿上下表面分别按物理 x/c 插值到 SuperFoil 401 点位置。二维输出再按 x/c 插值回三维单元中心，不按数组下标直接缩放网格。
 
-### SLD 模型
+采用论文式 (1)～(4) 的全局后掠变换。设 `cΛ=cos(后掠角)`，每个截面的转换为：
 
-采用论文评估过、原仓库 API 也使用的数据驱动 SLD 方案，不默认依赖 VLM 或真实 CFD 的 SLD 来推理。
+| 量 | 转换 |
+|---|---|
+| 二维相对形状 | `(y/c)_2D = (y/c)_section / cΛ` |
+| 二维 Mach | `Ma_2D = Ma_wing × cΛ` |
+| 二维截面 CL | `CL_2D = CL_SLD / cΛ²` |
+| 二维实际 Re | `Re_2D = Re_wing × local_chord × cΛ`；网络再以百万为单位输入 |
+| 二维 Cp/Cf 到三维先验 | 将二维原单位预测乘 `cΛ²` |
 
-三分支 FNN：工况分支 16 维，平面/展向参数分支 32、32，翼型分支 64、64，拼接后经过 64 维隐藏层输出 128 个展向站位。SuperWing 的 38 个参数分为 17 个平面/展向参数和 21 个 CST/翼根厚度参数；不把旧 29 维输入切片直接套到新参数上。
+针对 SuperWing 折点机翼，后掠角取暴露翼面首末截面的四分之一弦点连线，保持单一全局余弦修正；复杂三维效应由 residual 学习。SuperWing 长度采用参考弦长 1 的尺度。真实三维 Re 从原日志或明确提供的数据读取，不用二维默认 Re 覆盖。
 
-训练标签从 origingeom.npy 顶点和 data.npy 表面量计算：按原作者的切向与法向定义恢复摩擦向量，进行单元力积分，再除以截面弦长及条带展向宽度。积分使用 float64，标签提供给训练器时转换为 float32。
+周向上下表面的摩擦方向不同，二维 `1000×Cf` 转为三维 `150×Cf_tau` 时处理下表面符号；尾缘封口单元使用上下尾缘值的平均。展向摩擦先验为零，由三维 residual 预测。这些转换发生在二维输出逆归一化之后。
 
-真实 SLD 只用于这一训练损失。预测及三维残差模型输入使用 SLD 网络输出，不从 CFD 目标场提取真实 SLD。
+## 当前低保真 SLD
 
-### 后掠理论与三维网络
+SLD 通过 `low_fidelity_sld.estimate_spanwise_lift` 调用官方 PyTornado 0.5.0 原生求解器。输入为真实几何和攻角，Mach 接受并记录但未施加压缩性修正；不接收 CFD 压力/摩擦场。默认每半翼 32 个展向面板、4 个弦向面板，镜像后共 256 个面板；按物理展向位置映射为 128 个单元中心的无量纲截面 CL，输出位于后掠变换之前。
 
-保留论文式 (1)～(4)：
+这是不可压缩、无黏势流估计，不能解析跨声速激波和分离。完整几何处理、求解器调用、安装记录和数值边界见 [PYTORNADO.md](PYTORNADO.md)。求解失败时直接报错，不自动退回 CFD 积分或常数分布。
 
-- 二维有效形状的相对 y 除以后掠角余弦。
-- 二维有效 Mach 乘以余弦。
-- 二维有效 CL 除以余弦平方。
-- 二维有效 Re 为真实三维 Re × 局部弦长 × 余弦；SuperWing 使用参考弦长 1。
-- 二维输出 Cp/Cf 乘以余弦平方后作为三维先验。
+当前检查点明确记录 `sld_source=pytornado_vlm`、`sld_network_used=False`、`sld_uses_cfd=False`、`sld_training_steps=0`。完整模型仍包含冻结的 `lift` 模块，以保持结构/检查点兼容；当前 forward 使用外部 SLD，不调用该未训练模块。
 
-论文使用单段机翼。针对 SuperWing 的折点机翼，本入口采用暴露翼面首末截面四分之一弦点连线的全局后掠角，保持论文单一全局余弦修正形式；额外折点和复杂三维效应留给残差网络学习。这是数据/几何范围扩展，不代表已验证论文结论可直接推广到折点机翼。
+### 保留的作者三种 SLD 方案
 
-截面形状从顶点在展向相邻站位的均值得到，转换到局部弦坐标。沿上下表面分别按物理 x/c 线性插值到 SuperFoil 的 clustcos 参考位置；二维输出再插值回三维单元中心。不会按数组下标盲目把 401 点拉伸为 256 点。
+作者示例 [examples/wing/run_kfold.py](examples/wing/run_kfold.py) 的 `ref_type=1/2/3` 分别保留以下方案，FNN 构造位于 [flowvae/app/wing/models.py](flowvae/app/wing/models.py) 的 `triinput_simplemodel1`：
 
-SuperWing 的尾缘封口单元单独使用上下尾缘二维值的平均。二维流向摩擦转换到三维轮廓切向时处理下表面方向，并做 1000→150 的存储倍率转换；展向摩擦由三维残差分支预测。上述均是网络内部物理/数值变换，不会写回源数组。
+| 方案 | 作者示例选择 | 计算含义 | 当前任务是否使用 |
+|---|---|---|---|
+| 纯 VLM | `ref_type=1` | 示例读取预计算 VLM 分布；本项目现用官方 PyTornado 生成该低保真量 | **是** |
+| FNN 直接预测 | `ref_type=2` | FNN 从几何/工况直接预测截面 CL | 否，保留算法与入口 |
+| FNN 残差加 VLM | `ref_type=3` | FNN 学习 `CFD_CL−VLM_CL`，推理时再加回 VLM | 否，保留算法与入口 |
 
-三维网络输入为 3 个几何坐标通道和 2 个修正先验通道；全局 Mach/AoA 与压缩特征图拼接。编码器六组通道为 32、64、64、128、128、256；解码器为 128、128、64、64、32、32，三个输出分支对应 Cp、150×Cf_tau、300×Cf_z。只在轮廓方向下采样；128 个展向站位保持不变，256 个周向单元依次压缩至 4，再恢复至 256。
+作者示例还支持 CFD 真值参考分布等对照，不等同于独立低保真估计。两种 FNN 路径的代码保留不表示当前已经有与新 SuperWing/128 站位接口匹配的已训练权重。当前正式三维任务只有纯 VLM 来源，不能将未训练的 FNN 参数用于替代它。
 
-三维训练冻结二维模型及 SLD 模型，包括 eval 模式下的统计量；最终结果为修正二维先验加三维网络残差。二维 Cp/Cf 和 SLD 先经过逆归一化，再进行式 (1)～(4) 的物理变换；归一化的网络输出不能直接乘余弦平方。
+## 三维 residual 的结构与训练前向
 
-三维网络输入的五个通道分别按训练样本范围归一化。残差解码器预测 `(目标场 - 二维先验) / 目标场范围`，恢复残差时只乘目标场范围，不加目标场最小值，再与原单位的先验相加。训练和验证的 MSE 都在最终表面场按变量归一化的空间计算。
+这是对三维机翼表面参数网格使用二维卷积的网络，不是体积 Conv3d。
 
-## 三维数据接口
+- 输入 5 个通道：3 个几何坐标与 2 个经过后掠变换的二维 Cp/Cf 先验，形状 `(B,5,128,256)`。
+- 编码器六组通道为 `32、64、64、128、128、256`。只在周向下采样，展向 128 保持不变，周向由 256 压缩至 4。
+- 全局 Mach、AoA 两项归一化后扩展到压缩特征图，与 256 通道拼接为 258 通道。
+- 三个独立单通道 ResNet U-Net 解码器，通道为 `128、128、64、64、32、32`，恢复 `(B,3,128,256)` 残差。
+- 最终输出为残差加 `[prior_Cp,prior_Cf_tau,0]`，三个通道依次为 `Cp、150×Cf_tau、300×Cf_z`。
 
-输入沿用 SuperWing 原布局：
+输入的 5 个通道、工况和目标分别使用 train 拟合的 min/max buffer。解码器的残差恢复只乘目标范围，不加目标最小值，避免把偏置重复加到先验上。损失是最终场在固定 train 归一化空间的 MSE。
 
-    <wing-root>/
-      configs.dat          # G×55，另有原始表头
-      index.npy            # N×12
-      geom0.npy            # G×3×128×256
-      origingeom.npy       # G×3×129×257
-      data.npy             # N×3×128×256，仅训练需要
-      running_info.jsonl   # 三工况模型的 Re 可从原始日志关联读取
-      training_samples_index.txt  # 训练时需要的官方训练样本行号
+准备阶段对全部选中样本计算 VLM 和冻结二维先验，训练阶段 `cached_forward` 使用同一先验结果，避免每轮重复计算 128 个二维截面。只更新三维 residual；二维与未使用 lift 的参数和 buffer 保持不变，每轮校验冻结状态与归一化状态。
 
-当前 A/B 接口使用四个主要文件；神经网络物理迁移另需原库已有的 origingeom.npy，避免猜测网格顶点、面积和截面几何。A/B 读取器允许原目录中存在该配套文件。
+## 原生数据与准备缓存
 
-使用原始编号、形状下标与工况标签各自的含义。Re 日志通过 configs[g,0] 的原始运行编号和工况标签关联，不把原始编号当作几何数组下标。没有 Re 日志时，三工况模型要求显式提供真实数值或文件。
+```text
+/home/cvlab/Projects/floGen/
+  datasets/SuperWing/                       # 原生55列配置、12列index、几何、场与Re日志
+  weights/2d/superfoil_epoch060_e4ae5a3daa5a.pt
+  .agent_runs/superwing_200_vlm_20261110_151059/cache/
+    geometry.npy                           # (G,3,128,256)，float32
+    prior.npy                              # (N,2,128,256)，float32
+    conditions.npy                         # (N,2)，Mach、AoA
+    geometry_indices.npy                   # (N,)，缓存几何局部下标
+    groups.npy                             # (N,)，原几何身份
+    sld.npy                                # (N,128)，VLM截面CL
+    reynolds.npy                           # (N,)，实际Re
+    split/{train_rows,test_rows,excluded_rows}.npy
+    split/manifest.json
+    manifest.json                          # 源文件、缓存和二维权重SHA
+  .agent_runs/superwing_200_bs8_20261111_190048/
+    pipeline_config.json
+    runtime/                               # HOME、临时文件及各类任务缓存
+    training/                              # 当前任务独立输出
+```
 
-预测不读取输入 data.npy，输入可以只提供几何和工况配套文件。导出到 D:/data/foilperf/network：
+缓存 `N` 仍按原 28,856 条记录寻址，训练实际使用拆分中的 28,850 条；6 条 excluded 不用于训练/测试。CFD 标签路径记在缓存 manifest 中，当前服务器传输副本为原始目标按训练相同方式转换的 float32；本机原始 float64 数据未修改。缓存和二维权重以内容 SHA 绑定，训练开始、恢复和最终验证均检查来源一致性。
 
-    data.npy              # float32 神经网络结果，N×3×128×256
-    index.npy             # 原样复制输入元数据
-    configs.dat           # 原样复制
-    geom0.npy             # 原样复制，保持坐标精度
-    origingeom.npy         # 原样复制
-    running_info.jsonl    # 输入存在时原样复制
-    prediction_info.json # 完成状态、通道、倍率和来源说明
+## 运行、同步与检查点
 
-index.npy 的系数列是原数据元数据的副本，不冒充网络积分结果；prediction_info.json 显式记录其角色。网络预测仅在 data.npy 中。不会把 CFD 的场值复制成预测。
+当前配置在 PyCharm 内通过以下本机入口派发；已有 launch marker 时不会重复启动一个新任务：
 
-导出保留输入完整样本集合与原行号，能直接被当前 D:/dspy 的 SuperWing 比较器配对。中断时只留下 data.npy.partial；全部批次完成才改名为 data.npy。输出目录须为空，禁止覆盖数据源、在源数据目录内导出或覆盖已有预测。
+```powershell
+& 'C:/Users/fff/miniconda3/envs/flogen/python.exe' -B build/launch_superwing_bs8.py
+```
 
-## 二维数据接口
+只读查询当前任务：
 
---foil-root 默认指向 D:/Superfoil，其下保留原有 VT 子目录；--foil-subset 明确选择 VT-BUF、VT-DD 或 VT-GU：
+```powershell
+& 'C:/Users/fff/miniconda3/envs/flogen/python.exe' -B build/check_superwing_bs8_progress.py
+```
 
-    <foil-root>/VT/<subset>/
-      data.npy             # N×3×401；y、Cp、1000×Cf
-      index.npy            # N×13
-      traindataindex.txt   # 官方训练样本行号
+服务器解释器为 `/home/cvlab/miniconda3/envs/flogen/bin/python`。任务文件、HOME、TMP、Matplotlib、CUDA、Torch 等任务缓存均放在 `Projects/floGen` 内。SSH 使用既有项目连接助手和固定主机密钥；凭据不写入文档或日志。
 
-保持原始形状、通道、倍率和符号。BUF/GU 读取 Mach 第 5 列、CL 第 9 列；DD 读取 Mach 第 3 列、目标 CL 第 6 列，不能把第 9 列实际攻角当作 CL。以上下标均从 0 开始。几何直接读取 data[:,0]，所以 GU 的实际厚度变化自然保留。
+本机状态为 [weights/3d/server_200_bs8_job.json](weights/3d/server_200_bs8_job.json)，输出目录为 [weights/3d/superwing_200_bs8_20261111_190048](weights/3d/superwing_200_bs8_20261111_190048)。服务器 `latest.pt` 每轮原子更新，包含完整模型、归一化、Adam、随机数状态和历史；`epoch_010.pt` 等十轮快照发布后由监督器下载到本机 `checkpoints/` 并核对 SHA。逐轮日志和图像同步到该本机目录。
 
-FT 本地缺少流场数组；不伪造 FT 训练场，不把其 14 个 CST 系数套成 VT 的 20 系数。
+训练器支持 `--resume` 恢复同一输出目录，要求 batch、数据 SHA、拆分、二维来源和其他配置一致。当前 batch size 8 新任务未传 resume，旧 batch size 2 权重仅归档。需要另开新训练时，应使用独立的 run/config/output；不能把当前已经派发的配置误当新任务反复覆盖。
 
-## 训练与验证
+完成的判定包括：服务器 200 轮结束、最终检查点重新加载 test 结果一致、`verification.json=passed`，以及本机 20 个十轮检查点全部下载通过校验。
 
-使用官方训练样本列表；从其中按几何身份再划分固定验证组，默认 10%，seed=42。官方测试形状不进入训练/验证集。
+## 指标与其他入口的区别
 
-按照论文第 III.D 节，输入、输出统一采用逐变量最小最大值归一化 `(x - xmin) / (xmax - xmin)`，替代均值/标准差标准化。范围只由本次选中的训练样本拟合，空间分布通道在所有训练样本和空间点上共享一组范围；SLD 也使用一个覆盖训练样本及展向点的 CL 范围。常量变量使用单位分母，训练范围外的验证/推理值不裁剪。三维先验通道的范围由冻结的二维/SLD 模型生成的先验确定，不使用 CFD 目标冒充输入。范围拟合采用流式读取，不修改源数组，验证集和测试集不参与拟合。
+`history.json` 每轮记录 train MSE、完整 test MSE、训练/测试耗时，以及每个通道的平均绝对误差、RMSE 和百分比统计。主要百分比为每个机翼通道上的 `100×mean(abs(pred−true))/(max(true)−min(true))`，再汇总均值、p95、最差值和极差。相对 L1 以 `sum(abs(true))` 为分母；Cf 物理单位统计先除以 150/300。零分母百分比记为未定义并单列数量，不用任意 epsilon 伪造百分比。不能用 `100%−NMAE` 表示准确率。
 
-最小值和范围作为模型 buffer 与权重一起保存，加载后使用相同的归一化和逆归一化。检查点格式已更新为 `physics_embedded_superwing_v2`，并记录归一化约定；原 v1 均值/标准差权重缺少输入/输出范围，必须重新训练，不会被当作新模型静默加载。论文未给出逐变量数值范围，本实现采用训练集范围这一明确约定，不能据此宣称已使用作者原始范围。
+`main.py pretrain-2d/train-sld/train-3d` 是原保留入口，其默认设置、官方列表/验证划分和最佳验证权重策略不同：二维默认 300 轮，FNN-SLD/三维默认 900 轮，通用三维默认 batch 2。当前专用训练器默认 200 轮，但 parser 的 batch 默认仍为 2；本次通过任务配置显式传入 train 8、test 4。文档中的当前任务值不是修改了这些通用 CLI 默认值。
 
-训练采用 Adam、MSE。二维默认 300 轮、前 20 轮预热为 1e-5→1e-4，随后按 0.95 指数衰减；三维按论文将调度拉长 3 倍，默认 900 轮。SLD 默认 900 轮，按原仓库 warmup_lr_4 使用 4 倍调度。新数据网格更大，三维默认 batch-size=2，可显式设置。
+论文使用二维 321 点、三维 101×321 网格；当前使用原数据库 401 点和 128×256 单元。论文三维训练设置含 batch 8、900 轮和交叉验证，当前用户要求 200 轮和固定 9∶1 test。论文附录文字与作者源码的解码器表述存在差别；当前三个单通道分支与作者源码形式相近，不声称所有层级和训练实验完全复现论文。
 
-SLD 检查点记录训练几何编号；三维训练前拒绝其与三维验证形状重叠，防止辅助模型通过 SLD 标签泄漏验证信息。默认同一 seed/划分参数会得到一致分组。
-
-各训练命令只在结束时保存验证损失最好的状态；不覆盖已有检查点，记录训练步数、划分与前序模型来源。检查点使用带版本和通道约定的自包含字典，加载采用 weights_only=True。未训练检查点、阶段错误或不匹配的通道约定不能用于真实导出。
-
-完整训练需要用户实际运行，以下示例只是入口，不代表本次已经完成训练。
-
-## 命令
-
-在已安装 PyTorch、NumPy 的环境运行；当前已验证环境是 C:/Users/fff/miniconda3/envs/3.12torch/python.exe。新入口不需要 SciPy、cfdpost、CST 建模库或 Transformer 依赖。
-
-只读检查已确认的数据目录：
-
-    python main.py inspect --wing-root D:/superwing
-
-检查二维数据，默认使用已确认的 D:/Superfoil，并区分原文件缺少 Re 列与已配置 Re：
-
-    python main.py inspect --foil-subset VT-GU
-
-CPU 三阶段前向/反向诊断，不导出生产预测：
-
-    python main.py smoke-test --device cpu
-
-论文三工况二维预训练（默认目录 D:/Superfoil、真实 Re=2e7）：
-
-    python main.py pretrain-2d --foil-subset VT-GU --checkpoint checkpoints/airfoil.pt --device cpu
-
-VT-GU 仅为命令示例，训练子集由调用者明确选择。也可显式写出同一配置：
-
-    python main.py pretrain-2d --foil-root D:/Superfoil --foil-subset VT-GU --condition-dim 3 --reynolds 20000000 --checkpoint checkpoints/airfoil.pt --device cpu
-
-更换二维数据集且 Re 不同时，须通过 --reynolds 或 --reynolds-file 覆盖已确认的默认值；仅在明确需要 Mach/CL 变体时使用 --condition-dim 2。
-
-训练 SLD 和三维残差：
-
-    python main.py train-sld --wing-root D:/superwing --checkpoint checkpoints/sld.pt --device cpu
-    python main.py train-3d --wing-root D:/superwing --airfoil-checkpoint checkpoints/airfoil.pt --sld-checkpoint checkpoints/sld.pt --checkpoint checkpoints/wing.pt --device cpu
-
-原始日志提供 SuperWing 的真实 Re；换成其他输入目录时，若无相应日志且二维检查点需要 Re，须传 --reynolds 或 --reynolds-file。
-
-使用已训练检查点导出给当前项目：
-
-    python main.py predict --checkpoint checkpoints/wing.pt --input-root D:/data/foilperf/cfd --output-root D:/data/foilperf/network --device cpu
-
-以 --max-steps 1 --epochs 1 --max-train-samples <数量> 可做明确的短诊断，不应把这种权重当作经充分验证的气动模型。
-
-E 的 D:/data/foilgeo 仍是参数 JSON。新入口的直接输入是表面网格与工况，不新增从参数到 CAD/CFD 网格的生成器。
-
-## 验证范围
-
-- 回归测试涵盖原倍率、DD 列映射、几何分组划分、二维已确认 Re 默认值与显式标量/文件覆盖、三维原始 Re 日志不被二维默认值覆盖、缺失数据拒绝、后掠变换和摩擦方向、插值、冻结参数、三阶段短训练、检查点保存/加载；另覆盖逐变量范围、常量通道、范围外推、训练集独立拟合、物理变换前逆归一化、残差不重复加偏置及旧检查点拒绝。
-- 在临时合成数据上实际完成三个训练命令各一步更新，再通过 predict 导出，交由 D:/dspy 的真实 SuperWing 比较器读取，验证四个样本/三通道的格式兼容。
-- 只读抽查真实 SuperWing 的 n=0、10829、28855，核对参考网格、128 站位 SLD 标签和 Re 关联；只读检查 SuperFoil 三个 VT 子集的首样本。
-- 未修改数据库文件，没有把随机/短训练结果写入生产 network 目录。
-- GPU 已复测通过：Python 3.12、PyTorch 2.10.0 / CUDA 13.0、cuDNN 9.25.1.1、RTX 3060。此前 `Cannot load symbol cudnnGetVersion` 的原因是直接启动 Python 的检查进程未包含 Conda `Library/bin` DLL 搜索路径；补齐进程内 PATH 后，最小卷积及三阶段合成数据的 GPU 前向、反向和参数更新均通过。入口仍默认 CPU，可显式选择 --device cuda。该结果是短诊断，不代表完成数百轮训练。
-
-若直接使用绝对路径启动 Python，在 PowerShell 中可按本次已验证方式设置当前会话的 DLL 搜索路径（不修改系统 PATH）：
-
-    $torchEnv = 'C:\Users\fff\miniconda3\envs\3.12torch'
-    $env:PATH = "$torchEnv\Library\bin;$torchEnv\Scripts;$torchEnv\DLLs;$torchEnv;$env:PATH"
-    & "$torchEnv\python.exe" -B main.py smoke-test --device cuda
-
-测试：
-
-    python -B -m unittest discover -s tests -v
-
-可设置 DSPY_PYTHON 为当前多智能体项目的 Python 可执行文件，以启用导出文件的跨项目读取检查。默认测试均使用临时合成文件。
+当前 VLM 三维权重必须通过 `predict-foilpara` 或显式提供外部 SLD 的同等前向调用推理；`main.py predict` 和 [bridge.py](bridge.py) 的旧 FNN-SLD 协议不能直接使用它。原生 SuperWing 库格式、三目录单 case 格式和桥接 geometry manifest 格式是不同接口，不能互换目录名称。

@@ -2,7 +2,15 @@
 
 入口：python -B bridge.py --job <绝对路径job.json>。
 
-bridge.py 独立复用 main.py 的 SuperWingData、PhysicsEmbeddedWingPredictor、v2 检查点和 predict_directory，不改变原训练命令。当前协议为 wing-loop-v1，operation 为 train_predict。
+bridge.py 独立复用 main.py 的 SuperWingData、PhysicsEmbeddedWingPredictor、v2 检查点和 predict_directory，不改变原训练命令。协议为 `wing-loop-v1`，operation 支持 `train_predict` 与 `predict`。
+
+## 与当前主流程的兼容边界
+
+该文件描述保留的旧增量训练和独立几何协议，其形状/manifest 契约保持不变；它不是当前 `foilpara/{foilgeo,foiloc,foilsld}` 的单算例入口。
+
+当前三维权重使用冻结二维网络加 PyTornado 外部 SLD，记录 `sld_network_used=False`、`sld_training_steps=0`。`bridge.py` 的两个 operation 都要求已训练的 FNN-SLD 前序，因此**不能直接加载当前 VLM 三维权重执行桥接**。当前权重的正式纯预测使用 `main.py predict-foilpara`，见 [FOILPARA.md](FOILPARA.md)；当前 200 轮训练使用专用训练器，见 [IMPLEMENTATION.md](IMPLEMENTATION.md)。
+
+下面的训练/预测规则适用于满足旧协议前序和数据要求的检查点。文件协议和代码功能在文档整理中没有修改。
 
 ## 接续语义
 
@@ -32,7 +40,7 @@ feedback 精确匹配 D:/dspy/design.py 的 TrainingFeedback：round_id、valida
 
 tests/test_bridge.py 的 bootstrap_fixture(base) 可供跨项目测试复用：在调用者给出的临时目录里，创建 4 样本原格式数据并让二维、SLD、三维模型各实际优化 1 步，返回 cfd_root、checkpoint、train_rows=[0,1]、validation_rows=[2,3]。训练形状为 101，验证形状为 509。job_fixture 可构造共同协议的任务。
 
-当前回归覆盖 1 步训练及下一轮接续 2 步、固定归一化与先验、真实预测导出、源数据未变、Re/真值指纹、形状泄漏、重复样本、失败反馈和 claim 防重跑。测试只使用临时合成数组，未运行完整训练。
+回归覆盖 1 步训练及下一轮接续 2 步、固定归一化与先验、真实预测导出、源数据未变、Re/真值指纹、形状泄漏、重复样本、失败反馈和 claim 防重跑。测试只使用临时合成数组，未运行完整训练。
 
 
 ## 独立几何预测分支
@@ -49,4 +57,4 @@ manifest 的 schema_version=wing-geometry-v1，files 映射记录四个原始几
 
 原输入 manifest 以 source_geometry_manifest.json 复制到预测目录，并由 prediction_info.source_geometry_manifest 指明它描述的是来源。这样即便兼容输入从十二列 index 截成六列输出，也不会把原 manifest 冒充输出文件清单。完整发布前后还会复核来源 manifest/各文件及输入模型未变。
 
-新增独立预测测试仅调用一次短 bootstrap，再在完全没有 data.npy 的几何目录上执行真实模型前向；测试禁止创建 Adam/拟合归一化/打开名为 data.npy 的源文件，检查所有预测有限、Nx6元数据和共享指纹，并验证几何篡改在加载模型前即被拒绝。没有重复运行旧增量训练整套测试。
+新增独立预测测试仅调用一次短 bootstrap，再在完全没有 data.npy 的几何目录上执行真实模型前向；测试禁止创建 Adam/拟合归一化/打开名为 data.npy 的源文件，检查所有预测有限、Nx6元数据和共享指纹，并验证几何篡改在加载模型前即被拒绝。桥接回归使用临时模型与临时数据，与当前运行中的 200 轮训练无关。

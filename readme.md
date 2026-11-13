@@ -1,15 +1,35 @@
+# FloGen：物理嵌入式机翼表面预测
 
-# FloGen
+本项目使用 SuperFoil 训练二维翼型模型，将冻结的二维预测与后掠理论、官方 PyTornado 低保真展向升力估计结合，再由三维残差网络预测机翼表面的 Cp、轮廓切向摩擦和展向摩擦。模型、原始数据适配和单算例文件接口的实现均位于当前工作区。
 
-本地二维网络入口、参数及权重使用说明见 [二维神经网络使用说明](二维神经网络使用说明.md)，
-详细网络结构和已完成训练结果见 [MODEL_2D.md](MODEL_2D.md)。
+## 使用入口
 
-FlowGen is a universal flowfield generator based on machine learning and implentmented in Pytorch. 
-- It differs from other data-driven flowfield generators that it introduce **physics knowledge** to enhance the predicting accuracy and generaliztion capability. 
-- It has been applied to the prediction of airfoil, [wing](#web-wing---interactive-transonic-wing-design-app) and single expansion ramp nozzle (SERN).
-- It is successfull applied to gradient-free optimization and gradient-based optimization (with utilizing back-propagation) tasks such as optimizing transonic buffet onset and multi-design-point fluidic injection parameters.
+| 任务 | 代码或文档 |
+|---|---|
+| 二维权重加载、输入输出和训练命令 | [二维神经网络使用说明](二维神经网络使用说明.md) |
+| 二维网络结构、数据划分与 60 轮权重记录 | [MODEL_2D.md](MODEL_2D.md) |
+| 三维网络、后掠变换、实际训练配置与检查点 | [IMPLEMENTATION.md](IMPLEMENTATION.md) |
+| 正式单算例输入与网络输出协议 | [FOILPARA.md](FOILPARA.md) |
+| 项目目录、运行材料与保留依赖 | [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) |
+| 从 SuperWing 读取一条参考 case 并交付输入/CFD | [SUPERWING_IO.md](SUPERWING_IO.md) |
+| 官方 PyTornado SLD 算法、环境和适用范围 | [PYTORNADO.md](PYTORNADO.md) |
+| 原有增量训练/几何预测协议及兼容边界 | [BRIDGE.md](BRIDGE.md) |
 
-You can find the documentation of flowGen [here](https://flogen.readthedocs.io/en/latest/).
+当前二维权重为 [weights/2d/latest.pt](weights/2d/latest.pt)，已完成 60 轮训练。当前三维任务配置为 [build/superwing_200_bs8_config.json](build/superwing_200_bs8_config.json)：训练 batch size 8，test batch size 4，目标 200 轮，每轮 test，每 10 轮下载一个检查点到本机。训练完成情况应以任务状态文件为准，不能仅凭配置判断已经完成 200 轮。
+
+正式推理命令为 `python -B main.py predict-foilpara --checkpoint <已训练的三维权重>`，默认从 `D:/data/foilpara/{foilgeo,foiloc,foilsld}` 读取单算例，输出到 `D:/data/foilperf/network`。当前 VLM 三维检查点要求外部 SLD；详细形状、单位和目录冲突规则见 FOILPARA 文档。
+
+## 项目边界
+
+当前本机数据根目录为 `D:/SuperFoil` 和 `D:/SuperWing`，源数组保持只读。服务器使用 Conda `flogen`，所有任务代码、数据、缓存、日志和输出均位于 `/home/cvlab/Projects/floGen`。服务器训练由本机 PyCharm 中的 subprocess/SSH 监督进程启动和同步。
+
+`readforagent` 保留项目最初要求，原文保持不变；当前训练规模和 batch 设置以之后用户明确要求及实际任务配置为准。[多智能体系统框架](多智能体系统框架.md)描述外部 A–E 协作目标，不等同于本项目已经实现全部智能体。原作者算法及底层模型库按当前功能依赖保留；其通用文档描述的历史应用，与本机当前训练入口的参数和数据协议需要区分。
+
+项目内保留[物理嵌入论文译文](2025_AIAAJ_基于物理嵌入式迁移学习的后掠翼快速气动预测.md)，用作方法参考。当前实现适配了现有数据库网格，并采用用户指定的训练规模，未宣称复现论文全部训练实验或误差结论。论文原稿中的插图 `assets` 原本未随项目提供，原文完整保留；这些缺图不是训练或推理的运行依赖。
+
+## 原项目、数据来源与引用
+
+原项目通用文档：[floGen documentation](https://flogen.readthedocs.io/en/latest/)。数据来源：[SuperFoil](https://huggingface.co/datasets/yunplus/SuperFoil)、[SuperWing](https://huggingface.co/datasets/yunplus/SuperWing)。原作者 Web-wing 应用及其部署代码分别位于 [TUM Web-wing](https://webwing.pbs.cit.tum.de/) 和 [webwing repository](https://github.com/YangYunjia/webwing)。这些外部应用与本工作区的单算例接口独立。
 
 **Author:** 
 
@@ -44,20 +64,4 @@ You can find the documentation of flowGen [here](https://flogen.readthedocs.io/e
     Yang, Yunjia*, Babak Gholami, Caglar Gurbuz, Mohammad Rashed, Nils Thuerey. 2026. "Towards a Foundation-Model Paradigm for Aerodynamic Prediction in Three-dimensional Design." Accepted by AIAA Journal.
     ```
 
-
-## Datasets
-
-The flowfield datasets to train all of our models are available upon request. Please see our [THIS HUGGINGFACE REPO](https://huggingface.co/datasets/yunplus/SuperFoil) for airfoil datasets and [THIS HUGGINGFACE REPO](https://huggingface.co/datasets/yunplus/SuperWing) for wing datasets.
-
-
-## Applications
-
-### Web-wing - Interactive Transonic Wing Design App
-
-The physics-embedded transfer learning for transonic wing is demonstrated with a simple interactive app at [TUM website](https://webwing.pbs.cit.tum.de/). You can modify the airfoil geometry, wing planform geometry, and wing operating conditions to see what will happen on the wing surface flow field. Feel free to play with it, and your knowledge on wing aerodynamics will grow.
-
-You can also locally deploy it, and you can find how to do it [here](https://github.com/YangYunjia/webwing).
-
-The next step of the app is a gradient optimization tool for wing performance, which will come soon.
-
-![](docs/source/_static/images/webwing/webwing.gif)
+原代码许可证见 [LICENSE](LICENSE)。

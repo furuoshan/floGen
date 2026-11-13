@@ -1,0 +1,52 @@
+{
+  "status": "complete",
+  "completed_utc": "2026-11-12T06:49:28.199933+00:00",
+  "scope": "Local D:/floGen cleanup; server training files and runtime unchanged",
+  "removed_targets": 194,
+  "removed_files": 2917,
+  "removed_bytes": 15827052261,
+  "integrity_status": "passed",
+  "unchanged_baseline_files": 548,
+  "existing_weight_files_sha256_verified": 23,
+  "readforagent_unchanged": true,
+  "retained_author_sld_methods": [
+    "VLM",
+    "direct FNN",
+    "VLM plus FNN residual"
+  ],
+  "author_example_git_index_equivalent": true,
+  "author_example_sha256": "91f8b9d5c02269e4c7ffa72c9804ce074d125afc3de04c9fb616f5e7b5e1219f",
+  "retained_flowvae_files_unchanged": 37,
+  "author_internal_imports_checked": 67,
+  "regression_tests": 110,
+  "regression_tests_passed": true,
+  "current_documentation_files_checked": 10,
+  "current_documentation_broken_relative_links": 0,
+  "python_documentation_snippets_ast_passed": 7,
+  "reference_paper_original_missing_images": 19,
+  "reference_paper_original_preserved": true,
+  "server_training_observed_utc": "2026-11-12T06:47:20.469696+00:00",
+  "server_training_status": {
+    "status": "training_epoch",
+    "run_id": "e52791090af24e5ca12db66a1165f43b",
+    "epoch": 99,
+    "last_completed_epoch": 98,
+    "epochs_requested": 200,
+    "epoch_samples_seen": 4000,
+    "epoch_training_samples": 25965,
+    "epoch_optimizer_steps": 500,
+    "learning_rate": 5.1334208327950485e-05,
+    "elapsed_seconds": 71037.0511197378
+  },
+  "server_core_code_matches": {
+    "main.py": true,
+    "train_3d_train_test.py": true,
+    "prepare_superwing_3d_training.py": true
+  },
+  "detailed_records": [
+    "plan.json",
+    "baseline.json",
+    "integrity_verification.json",
+    "tests.log"
+  ]
+}

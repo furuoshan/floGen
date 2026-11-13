@@ -6,21 +6,21 @@
 几何配置仅保留原始编号、38 个几何参数、一份 Mach 和一份攻角，不保留多工况槽位。
 输出目录可为空或仅包含普通文件 `format.md`，导出会保留该文档；存在其他内容仍拒绝覆盖。
 
-此入口对应 `readforagent` 指定的数据流：机翼几何、工况和外部估计的展向升力分布输入神经网络，输出机翼表面压强和摩擦分布。二维预训练与三维流程使用独立命令；本次三维只进行前向测试，不更新参数。
+此入口对应 `readforagent` 指定的数据流：机翼几何、工况和外部估计的展向升力分布输入神经网络，输出机翼表面压强和摩擦分布。二维预训练与三维训练使用独立命令；本文描述的预测/导出入口仅前向，不更新参数。当前三维训练采用冻结二维网络和几何驱动 VLM，详见 [IMPLEMENTATION.md](IMPLEMENTATION.md)。
 
-## 项目结构与本次改动
+## 项目结构
 
 | 位置 | 职责 |
 |---|---|
 | `flowvae/base_model/` | 原有卷积、ResNet、MLP 编解码模块 |
 | `flowvae/vae.py` | 条件 U-Net 与编码器/解码器组合 |
 | `main.py` | 二维模型、SLD 模型、三维残差模型、后掠理论迁移、独立训练命令和检查点 |
-| `foilpara.py` | 本次新增：三目录数据适配、外部 SLD 预测导出、零优化步三维测试 |
-| `bridge.py` | 已有增量训练及独立几何预测协议，继续保持兼容 |
-| `tests/test_foilpara.py` | 本次新增：数据约定、外部 SLD 生效、只读和纯推理验证 |
-| `examples/wing/run_kfold.py` | 旧论文交叉验证示例，本轮不执行 |
+| `foilpara.py` | 三目录数据适配、外部 SLD 预测导出、零优化步三维测试 |
+| `bridge.py` | 独立旧增量训练/几何预测协议，要求已训练 FNN-SLD，不接收当前 VLM 权重 |
+| `tests/test_foilpara.py` | 数据约定、外部 SLD 生效、只读和纯推理验证 |
+| `examples/wing/run_kfold.py` | 原作者论文交叉验证示例，与当前专用 train/test 入口独立 |
 
-最初编写拆分接口时，`D:/data/foilpara/foiloc`、`foilgeo`、`foilsld` 都是空目录；随后已有 SuperWing 单 case 读取与导出接口交付参考样本。当前输入是否完成、来自哪个 case、采用何种 SLD，以各叶目录真实文件和 `source_case.json` 为准。本文的单 case 协议保持 SuperWing 网格及物理量定义，几何配置简化为 41 列。没有添加 CFD 网格生成器；几何参数须连同已经生成的表面网格提供。完整多智能体 A–E 的提示词与调度不属于此次神经网络入口改动。
+当前输入是否完成、来自哪个 case、采用何种 SLD，以各叶目录真实文件和 `source_case.json` 为准。本文的单 case 协议保持 SuperWing 网格及物理量定义，几何配置简化为 41 列。没有添加 CFD 网格生成器；几何参数须连同已经生成的表面网格提供。完整多智能体 A–E 的提示词与调度不属于此次神经网络入口改动。
 
 ## 输入文件
 
@@ -55,11 +55,13 @@ foilpara/
 
 `configs.dat` 只有一行 41 列：第 0 列为原始几何编号；`1:39` 为 38 个几何参数；第 39 列为唯一 Mach；第 40 列为唯一攻角。这里的切片采用 Python 结束下标不包含的约定。工况索引的 Mach/攻角必须与这两个单值一致。原始 SuperWing 训练库的 55 列读取仍独立保留，不要求也不接受在新三目录输入中填充八组数值。
 
+输入校验还包括：Mach 有限且为正，索引与配置中的 Mach/攻角一致，所有坐标有限，周向首末顶点闭合、中心坐标为四顶点平均，展向顶点站位逐段严格递增。用于默认 VLM 准备的 Mach 还须满足该势流适配器的 `[0,1)` 范围。
+
 `sectional_cl.npy` 是在 128 个展向单元中心处、应用后掠变换之前的截面 CL。展向顺序必须与几何网格的展向轴一致；不能直接传入牛顿单位的升力、总机翼 CL，或已经除以后掠角余弦平方的二维有效 CL。升力数据的 `index.npy` 用于绑定样本身份和顺序，错序时直接拒绝，不自动猜测或排序。数据提供方仍需确保每行数值与其索引、展向站位相符。
 
 三工况二维模型需要 `reynolds.npy`：必须是实际 Re，逐样本有限且为正。不会将二维数据的默认 Re 自动套到三维。只有明确采用二维 Mach/CL 两工况检查点时，该文件可省略。
 
-模型收到外部 `sld` 后直接用于物理迁移，绕过内部 SLD 网络；此入口缺失 SLD 会报错，不会静默回退。现有完整 SuperWing 和 `bridge.py` 入口未传外部 SLD 时继续使用原 SLD 网络。
+模型收到外部 `sld` 后直接用于物理迁移，绕过内部 SLD 网络；此入口缺失 SLD 会报错，不会静默回退。当前三维检查点记录 `sld_network_used=False`、`sld_source=pytornado_vlm`；`main.load_checkpoint` 为它设置 `requires_external_sld`，未提供外部 SLD 时拒绝前向。`main.py predict` 与 `bridge.py` 的旧 FNN-SLD 协议不能直接使用当前检查点；旧协议继续支持满足其已训练 FNN-SLD 前序要求的历史检查点。
 
 ### 当前默认的低保真 SLD 准备方式
 
@@ -93,59 +95,33 @@ network/
 
 ## 命令
 
-以下命令在项目根目录运行，环境需安装 PyTorch 与 NumPy。本机已验证的解释器是 `C:/Users/fff/miniconda3/envs/3.12torch/python.exe`。
+在项目根目录运行，使用本机 Conda `flogen`；解释器为 `C:/Users/fff/miniconda3/envs/flogen/python.exe`。网络推理需要 PyTorch 与 NumPy；只有准备 VLM SLD 时才调用 PyTornado 和 SciPy。
 
-三维前向与文件接口测试，无需检查点、真实输入或 CFD：
+三维前向与文件接口诊断不需要真实输入或已训练权重：
 
 ```powershell
 python -B main.py test-3d --device cpu
 ```
 
-此命令在临时目录构造符合上述协议的唯一一条合成样本，用随机初始化模型测试前向与导出，然后删除临时文件。报告明确标注 `diagnostic_untrained`，不创建优化器，不训练，不写生产目录，也不作气动精度结论。
+该命令在临时目录构造唯一一条单算例，以随机模型验证前向和导出，报告 `diagnostic_untrained`、输出 `(1,3,128,256)`、索引 `(1,6)`、优化步数 0。它不会写生产 `network`，也不用于说明气动精度。
 
-二维预训练保持独立，可直接使用 SuperFoil 原始文件：
-
-```powershell
-python -B main.py pretrain-2d --foil-subset VT-GU --checkpoint checkpoints/airfoil_vt_gu.pt --device cpu
-```
-
-默认二维配置：300 轮、batch size 16、Adam、MSE、三工况 Mach/CL/Re；前 20 轮学习率从 `1e-5` 预热至 `1e-4`，随后按 0.95 指数衰减。默认数据根目录 `D:/Superfoil`，默认真实 Re 为已有配置 `2e7`，可用 `--reynolds` 或 `--reynolds-file` 显式覆盖。仅从训练样本拟合逐变量 min/max 范围，官方训练列表内按几何划分验证集。VT-DD 与 BUF/GU 的工况列不同，读取器已分别处理。
-
-有充分训练并验证过的三维 v2 检查点后，执行实际预测：
+正式预测需提供已训练、已完整下载且验证过的三维检查点。以下路径以当前任务保留的第 80 轮为例，并不表示它是未来的最新轮：
 
 ```powershell
-python -B main.py predict-foilpara --checkpoint checkpoints/wing.pt --device cpu
+python -B main.py predict-foilpara --checkpoint weights/3d/superwing_200_bs8_20261111_190048/checkpoints/epoch_080.pt --device cuda
 ```
 
-该命令要求已训练的 wing 检查点及其二维/SLD 前序记录，不能使用本轮生成的二维一步诊断权重代替。三维训练命令虽保留，本轮未运行。
+命令默认读取上述 `D:/data/foilpara`，向 `D:/data/foilperf/network` 写唯一算例；`--input-root` 和 `--output-root` 可选择其他同格式目录。已有数据时拒绝覆盖，普通 `format.md` 文件保留。运行前需先完成几何、工况、实际 Re 与外部 SLD 的准备。
 
-本机历史归档已由用户清理。当前可直接向仅含 `format.md` 的 `network` 末级目录导出唯一算例；
-该目录已有预测数据时仍拒绝覆盖，需先由调用者归档既有结果。
+当前 VLM 检查点必须记录受过训练的二维前序，以及几何驱动、不使用 CFD 的 PyTornado SLD 来源；不要求训练一个未使用的 FNN-SLD。二维训练与三维训练不由本预测命令触发，分别见[二维神经网络使用说明](二维神经网络使用说明.md)和[IMPLEMENTATION.md](IMPLEMENTATION.md)。
 
-新增接口回归测试：
+## 接口回归范围
+
+[tests/test_foilpara.py](tests/test_foilpara.py) 覆盖单算例形状、外部 SLD 生效、元数据对应、实际 Re、几何合法性、源数据只读、前向不改模型状态、输出目录冲突和导出协议。[tests/test_wing_vlm_checkpoint.py](tests/test_wing_vlm_checkpoint.py) 覆盖当前 VLM 检查点的前序验证与缺失外部 SLD 拒绝。
 
 ```powershell
 python -B -m unittest discover -s tests -p test_foilpara.py -v
+python -B -m unittest discover -s tests -p test_wing_vlm_checkpoint.py -v
 ```
 
-原有 `smoke-test` 和部分旧测试会执行 SLD/三维优化步。因此当前“三维只测试”阶段应使用上述 `test-3d` 和新测试文件。
-
-## 历史接口验证与当前限制
-
-- 只读检查真实 SuperWing：28,856 个工况、4,239 个几何、128×256 单元网格。真实 SuperFoil VT-GU：16,031 个样本、每个翼型 401 点。
-- 在真实 VT-GU 上完成二维诊断：最多选取 32 个训练样本，独立几何验证比例 1%，batch size 16，运行一轮且最多一个优化步。学习率 `1e-5`，归一化空间训练 MSE 为 `0.2817867100`，验证 MSE 为 `0.2807653739`。这是链路检查，不能用来估计完整训练后的精度。
-- 新接口的 12 项回归测试全部通过；另外运行原有 `test_main.py` 的 20 项非训练测试，全部通过。没有运行其中会更新 SLD/三维权重的两项旧测试，也没有运行完整桥接训练测试。
-- `test-3d --device cpu` 实际通过：输出 `(2,3,128,256)`、索引 `(2,6)`，所有输出有限，优化步数为 0，完整模型状态和归一化状态保持不变。测试仅使用临时合成文件。
-- 保存二维诊断检查点 `checkpoints/diagnostics/airfoil_vt_gu_20261109_1step.pt`。检查点目录已加入忽略规则，避免将权重纳入代码版本。
-- 二维与三维的论文网格分别被现有数据的 401 点和 128×256 单元替代。三维保留已有三分支解码器，与论文附录 A2 的单解码器三通道有架构差异，未宣称严格复现论文精度。
-- 没有完成二维 300 轮训练，没有训练 SLD/三维模型，没有把随机模型结果写入生产 `network` 目录。最初空目录随后已能由单 case 读取器按协议准备输入；历史参考积分 SLD 和当前默认 VLM SLD 必须通过 `source_case.json` 的来源字段区分，实际生产推理仍需要已训练并验证的三维检查点。
-
-以上一步训练及接口回归数字属于当时运行记录，不证明新的默认 VLM 已完成高层 PyTornado API 或气动精度验证。当前原生 VLM 的数值检查记录单列在 `PYTORNADO.md`。
-
-## 当前 VLM 接入与数据交付记录
-
-当前默认低保真估计已实际调用官方 PyTornado 原生扩展。5 项低保真数值测试、14 项单 case I/O 测试、16 项三目录测试联合运行，共 35 项通过，耗时 7.647 秒；其中检查了零攻角对称翼、正攻角升力及网格收敛、CFD 场篡改不改变 VLM、无 `data.npy` 的纯几何估计。
-
-`D:/data` 的真实第 0 个参考 case 已更新为默认 VLM，来源 `pytornado_vlm`，共同 `export_id=50e05c44a1694a47b97155399cacea95`，`sld_requires_cfd=false`、`reference_sld_uses_cfd=false`。此次只替换一条 `sectional_cl.npy` 和四叶目录的 `source_case.json`，几何、工况和 CFD 文件 SHA256 均未变；旧版本备份在 `build/vlm-sld-refresh-backup`。10 个数值文件、两个 41 列配置、输入与 CFD 读取及共享身份检查均通过。
-
-这不增加新的 CFD、训练或网络预测。官方 Python 层导入和 NACA 翼型辅助函数兼容检查也已通过，但不能由此声称完整高层飞机定义 API 已完成端到端气动验收；VLM 不可压缩、无黏及暴露翼根镜像假设的边界见 `PYTORNADO.md`。
+这些测试使用临时数据；接口测试通过不等同于模型在所有机翼和工况下都已达到气动精度要求。默认 VLM 的数值与 CFD 隔离检查集中说明在 [PYTORNADO.md](PYTORNADO.md)，不在各接口文档中重复记录历史 pass 数量和临时运行状态。

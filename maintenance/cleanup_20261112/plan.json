@@ -1,0 +1,2379 @@
+{
+  "project_root": "D:\\floGen",
+  "created_utc": "2026-11-12T06:23:10.202482+00:00",
+  "authorization": "Keep current implementation and task descriptions; remove superseded code; preserve all three author SLD methods",
+  "targets": [
+    {
+      "path": "D:\\floGen\\.deps\\source",
+      "relative_path": ".deps/source",
+      "is_directory": true,
+      "files": 289,
+      "size_bytes": 15296701,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\bcrypt\\__pycache__",
+      "relative_path": ".deps/ssh/bcrypt/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 572,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cffi\\__pycache__",
+      "relative_path": ".deps/ssh/cffi/__pycache__",
+      "is_directory": true,
+      "files": 20,
+      "size_bytes": 422445,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/__pycache__",
+      "is_directory": true,
+      "files": 6,
+      "size_bytes": 21627,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/__pycache__",
+      "is_directory": true,
+      "files": 2,
+      "size_bytes": 22123,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\asn1\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/asn1/__pycache__",
+      "is_directory": true,
+      "files": 2,
+      "size_bytes": 19098,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\backends\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/backends/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 497,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\backends\\openssl\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/backends/openssl/__pycache__",
+      "is_directory": true,
+      "files": 2,
+      "size_bytes": 14276,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\bindings\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/bindings/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 251,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\bindings\\openssl\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/bindings/openssl/__pycache__",
+      "is_directory": true,
+      "files": 3,
+      "size_bytes": 10460,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\decrepit\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/decrepit/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 251,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\decrepit\\ciphers\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/decrepit/ciphers/__pycache__",
+      "is_directory": true,
+      "files": 3,
+      "size_bytes": 8413,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/__pycache__",
+      "is_directory": true,
+      "files": 13,
+      "size_bytes": 33482,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\asymmetric\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/asymmetric/__pycache__",
+      "is_directory": true,
+      "files": 14,
+      "size_bytes": 101351,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\ciphers\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/ciphers/__pycache__",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 20481,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\kdf\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/kdf/__pycache__",
+      "is_directory": true,
+      "files": 8,
+      "size_bytes": 7035,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\serialization\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/serialization/__pycache__",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 93475,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\hazmat\\primitives\\twofactor\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/hazmat/primitives/twofactor/__pycache__",
+      "is_directory": true,
+      "files": 3,
+      "size_bytes": 8124,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\cryptography\\x509\\__pycache__",
+      "relative_path": ".deps/ssh/cryptography/x509/__pycache__",
+      "is_directory": true,
+      "files": 9,
+      "size_bytes": 208407,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/__pycache__",
+      "is_directory": true,
+      "files": 16,
+      "size_bytes": 288315,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\completion\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/completion/__pycache__",
+      "is_directory": true,
+      "files": 2,
+      "size_bytes": 5898,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\parser\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/parser/__pycache__",
+      "is_directory": true,
+      "files": 4,
+      "size_bytes": 40797,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\vendor\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/vendor/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 185,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\vendor\\fluidity\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/vendor/fluidity/__pycache__",
+      "is_directory": true,
+      "files": 3,
+      "size_bytes": 17423,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\vendor\\lexicon\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/vendor/lexicon/__pycache__",
+      "is_directory": true,
+      "files": 4,
+      "size_bytes": 8216,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\invoke\\vendor\\yaml\\__pycache__",
+      "relative_path": ".deps/ssh/invoke/vendor/yaml/__pycache__",
+      "is_directory": true,
+      "files": 17,
+      "size_bytes": 251737,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\nacl\\__pycache__",
+      "relative_path": ".deps/ssh/nacl/__pycache__",
+      "is_directory": true,
+      "files": 9,
+      "size_bytes": 66961,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\nacl\\bindings\\__pycache__",
+      "relative_path": ".deps/ssh/nacl/bindings/__pycache__",
+      "is_directory": true,
+      "files": 16,
+      "size_bytes": 172480,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\nacl\\pwhash\\__pycache__",
+      "relative_path": ".deps/ssh/nacl/pwhash/__pycache__",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 22677,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\paramiko\\__pycache__",
+      "relative_path": ".deps/ssh/paramiko/__pycache__",
+      "is_directory": true,
+      "files": 42,
+      "size_bytes": 767060,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.deps\\ssh\\pycparser\\__pycache__",
+      "relative_path": ".deps/ssh/pycparser/__pycache__",
+      "is_directory": true,
+      "files": 7,
+      "size_bytes": 288309,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\.readthedocs.yml",
+      "relative_path": ".readthedocs.yml",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 855,
+      "source_digests": [
+        {
+          "path": ".readthedocs.yml",
+          "sha256": "dbab038eaa2de9dd4f6eac97f80b8ee6debbe01a2a1a0cfa143a2731795f66e7"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\__pycache__",
+      "relative_path": "__pycache__",
+      "is_directory": true,
+      "files": 2,
+      "size_bytes": 62120,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\__pycache__",
+      "relative_path": "build/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 29032,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\airfoils-scipy-compat-smoke.json",
+      "relative_path": "build/airfoils-scipy-compat-smoke.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 442,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\analyse_openfoam_benchmark10.py",
+      "relative_path": "build/analyse_openfoam_benchmark10.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2690,
+      "source_digests": [
+        {
+          "path": "build/analyse_openfoam_benchmark10.py",
+          "sha256": "48914a00cdb9b0a7289ca8a3b1b1734cf10c64b31837c9d83d41e37a2c8db771"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\audit_raw_database_operating_conditions.py",
+      "relative_path": "build/audit_raw_database_operating_conditions.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9216,
+      "source_digests": [
+        {
+          "path": "build/audit_raw_database_operating_conditions.py",
+          "sha256": "655bb1340051c77d22e4805a7015959f76aaec9b571418bee5659c0d972f88e6"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\audit_superfoil_reuse.py",
+      "relative_path": "build/audit_superfoil_reuse.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4847,
+      "source_digests": [
+        {
+          "path": "build/audit_superfoil_reuse.py",
+          "sha256": "d4eb72a68f7c0d003adcc63747045c13e2e999c6575322649abaa3c67e9b56d0"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\audit_superfoil_superwing_cst_reuse.py",
+      "relative_path": "build/audit_superfoil_superwing_cst_reuse.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 7198,
+      "source_digests": [
+        {
+          "path": "build/audit_superfoil_superwing_cst_reuse.py",
+          "sha256": "4259296f32a866b468e7318497196f57fc84cf5b29bff83b4b7268bc7d9f780d"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\audit_superfoil_training.py",
+      "relative_path": "build/audit_superfoil_training.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 7206,
+      "source_digests": [
+        {
+          "path": "build/audit_superfoil_training.py",
+          "sha256": "c88d10b16d83f0cdbe13b15fbfbf9821105a8d6fec019270f86506d1162c13f5"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\bdist.win-amd64",
+      "relative_path": "build/bdist.win-amd64",
+      "is_directory": true,
+      "files": 0,
+      "size_bytes": 0,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\benchmark10_readonly_acceptance_audit.json",
+      "relative_path": "build/benchmark10_readonly_acceptance_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 46434,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\benchmark10_readonly_acceptance_summary.json",
+      "relative_path": "build/benchmark10_readonly_acceptance_summary.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1113,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\benchmark10_v1_analysis.json",
+      "relative_path": "build/benchmark10_v1_analysis.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 13277,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\benchmark10_v1_timing_report.json",
+      "relative_path": "build/benchmark10_v1_timing_report.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 12767,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\benchmark_superwing_epoch.py",
+      "relative_path": "build/benchmark_superwing_epoch.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3612,
+      "source_digests": [
+        {
+          "path": "build/benchmark_superwing_epoch.py",
+          "sha256": "cd7e54afc75fb5a3026f5ae415a2513fb6ff4d3fc6f683a77d4ca0af7b4e91d9"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\check_current_superfoil_checkpoint.py",
+      "relative_path": "build/check_current_superfoil_checkpoint.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3864,
+      "source_digests": [
+        {
+          "path": "build/check_current_superfoil_checkpoint.py",
+          "sha256": "18f7b5e3336a56b0605d9d246abb5debe9a0c2fcde4ce594acbcdca241e8047b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\check_lts_restart_surface.py",
+      "relative_path": "build/check_lts_restart_surface.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2456,
+      "source_digests": [
+        {
+          "path": "build/check_lts_restart_surface.py",
+          "sha256": "ce0739df7ba1253b975148c1729e3e909b2db398a5d2200d6f3fb3328825a3fe"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\check_superfoil_near_geometry_conditions.py",
+      "relative_path": "build/check_superfoil_near_geometry_conditions.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4140,
+      "source_digests": [
+        {
+          "path": "build/check_superfoil_near_geometry_conditions.py",
+          "sha256": "9ffd0923fe6ca69c1900fe165381da5bc69a62f7d92ab6265c0b37934ecd57dd"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\check_superwing_training_progress.py",
+      "relative_path": "build/check_superwing_training_progress.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2017,
+      "source_digests": [
+        {
+          "path": "build/check_superwing_training_progress.py",
+          "sha256": "6976f00159a64797dc0e877ef82968585757fe1e356a3766680480ddce2313a7"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\checkpoint110_review",
+      "relative_path": "build/checkpoint110_review",
+      "is_directory": true,
+      "files": 4,
+      "size_bytes": 494452,
+      "source_digests": [
+        {
+          "path": "build/checkpoint110_review/make_comparison.py",
+          "sha256": "17dc8869dacc78c5caeb84dfbaccca880febcd0b3f45885a37ce49580eac028f"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\checkpoint30_review",
+      "relative_path": "build/checkpoint30_review",
+      "is_directory": true,
+      "files": 4,
+      "size_bytes": 505175,
+      "source_digests": [
+        {
+          "path": "build/checkpoint30_review/make_comparison.py",
+          "sha256": "ac1b104c5d793e97485c657aa8e55db436aaf744bfdc7f2271530e488b9c46f5"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\compare_database_operating_conditions.py",
+      "relative_path": "build/compare_database_operating_conditions.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9964,
+      "source_digests": [
+        {
+          "path": "build/compare_database_operating_conditions.py",
+          "sha256": "048471d38d54062446cbc28c94b6ef74c0cc867093a6a239f560019566ab8a06"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\configure_flogen_training.py",
+      "relative_path": "build/configure_flogen_training.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2100,
+      "source_digests": [
+        {
+          "path": "build/configure_flogen_training.py",
+          "sha256": "8af1904c04e92efa5eef7a2db2e795cc14e7456ff51f5b86ede3e6673e36b450"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\data-format-docs",
+      "relative_path": "build/data-format-docs",
+      "is_directory": true,
+      "files": 10,
+      "size_bytes": 63428,
+      "source_digests": [
+        {
+          "path": "build/data-format-docs/format.md",
+          "sha256": "73ec6d8bdac867df84499df13d480ccebe8927a808eb6eff205aee661780d185"
+        },
+        {
+          "path": "build/data-format-docs/foilpara/format.md",
+          "sha256": "300964cb900e1cd8fe761bf2da6bda8679820b54cdefd667ae9eb05538ff54ad"
+        },
+        {
+          "path": "build/data-format-docs/foilperf/format.md",
+          "sha256": "b3da903e532d78554e69c730be922ca273eb7399020a79d8533089f803440e26"
+        },
+        {
+          "path": "build/data-format-docs/foilpara/foilgeo/format.md",
+          "sha256": "367b25ef9f6716ae08656fb48fd0493dd0717c5e808e7c5a50d175b7aa348a76"
+        },
+        {
+          "path": "build/data-format-docs/foilpara/foiloc/format.md",
+          "sha256": "3271cdfd3e9a858e8703bd10f61dc8385ce8a642f3c3d2d2e145a66dba1e37d6"
+        },
+        {
+          "path": "build/data-format-docs/foilpara/foilsld/format.md",
+          "sha256": "f76c58402b28c869f044c0e581cc44379ec446fd7db52ae362f5820a3c613bd6"
+        },
+        {
+          "path": "build/data-format-docs/foilperf/cfd/format.md",
+          "sha256": "ba32fe5819aa8a908ac1f71a6ab8ea1b269fd88d05649c5853cf5ccc14bc5115"
+        },
+        {
+          "path": "build/data-format-docs/foilperf/network/format.md",
+          "sha256": "7f0cbf53ab1a643dcb2ac48c17e7d5b10de2a18bb8e9705fb135689ea266142a"
+        },
+        {
+          "path": "build/data-format-docs/foilperf/network/training-audit-20261108/format.md",
+          "sha256": "11f2c63b899c3810538a41b7a80c9a3f1d83e1538281469e96e3c30d0c0e4d1f"
+        },
+        {
+          "path": "build/data-format-docs/foilperf/network/training-audit-20261108/verification-geometry-only/format.md",
+          "sha256": "513eabe384f4c4494f0d91b8af4df190566281ee45e3d8969347618169ce6643"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\data-format-publication.json",
+      "relative_path": "build/data-format-publication.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 615,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\data-format-review.json",
+      "relative_path": "build/data-format-review.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2748,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\data-format-single",
+      "relative_path": "build/data-format-single",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 72209,
+      "source_digests": [
+        {
+          "path": "build/data-format-single/foilpara/foilgeo/format.md",
+          "sha256": "aafa51f770249bcf5b800f6aac35457714b92ce4b1eba18c2624604e86359dd7"
+        },
+        {
+          "path": "build/data-format-single/foilpara/foiloc/format.md",
+          "sha256": "42571d35866f6893077f5251e44502ded21777394b7b027ce2f9a0a626317ab7"
+        },
+        {
+          "path": "build/data-format-single/foilpara/foilsld/format.md",
+          "sha256": "7bafbc7cf0a3864fe4f1382f5efc5c207cd9779963541bd9b1c62d9d19f25327"
+        },
+        {
+          "path": "build/data-format-single/foilperf/cfd/format.md",
+          "sha256": "d983c44f1f476e3abaaaa7ab2fcef1d8eca83b8e5bd398fda2bd0a29e240315a"
+        },
+        {
+          "path": "build/data-format-single/foilperf/network/format.md",
+          "sha256": "090b25d3760c5d8abfb1b9037d3aa9acf9bff4c9fc64f2f31facbec56ddd4ec7"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\database_operating_conditions_comparison.json",
+      "relative_path": "build/database_operating_conditions_comparison.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 15055,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\deploy_superwing_200.py",
+      "relative_path": "build/deploy_superwing_200.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6199,
+      "source_digests": [
+        {
+          "path": "build/deploy_superwing_200.py",
+          "sha256": "19efe7fde5b53a76b4f7744a2811f1e171322913c128ed8c9a4e30dc15097a29"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\diagnose_lts_combined.py",
+      "relative_path": "build/diagnose_lts_combined.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 799,
+      "source_digests": [
+        {
+          "path": "build/diagnose_lts_combined.py",
+          "sha256": "ce0632a672a3e15a832bd8f5ca22107f6f390dc53caa17f7074336bffcf8fab4"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\diagnose_lts_combined_result.json",
+      "relative_path": "build/diagnose_lts_combined_result.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 14384,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\diagnose_lts_restart.py",
+      "relative_path": "build/diagnose_lts_restart.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5291,
+      "source_digests": [
+        {
+          "path": "build/diagnose_lts_restart.py",
+          "sha256": "1a9b5203be0726b1463b4ce34766245962021946c1d008fcaf1833d35e7f23b6"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\diagnose_lts_restart_result.json",
+      "relative_path": "build/diagnose_lts_restart_result.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 354,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\diagnose_lts_restart_surface.json",
+      "relative_path": "build/diagnose_lts_restart_surface.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1645,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\export_superfoil_harder_test_rows.py",
+      "relative_path": "build/export_superfoil_harder_test_rows.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6295,
+      "source_digests": [
+        {
+          "path": "build/export_superfoil_harder_test_rows.py",
+          "sha256": "1a44f70af49e9618eca1d16841d6c54adfe6fc3bc7569a3a4fc3f63b51dc0a56"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\fix_xfoil_build.py",
+      "relative_path": "build/fix_xfoil_build.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2498,
+      "source_digests": [
+        {
+          "path": "build/fix_xfoil_build.py",
+          "sha256": "3e47df58deed3dd9ec048e548b248fe456216eb090c48173051df1e71cbb14e9"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\fix_xfoil_probe.sh",
+      "relative_path": "build/fix_xfoil_probe.sh",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 260,
+      "source_digests": [
+        {
+          "path": "build/fix_xfoil_probe.sh",
+          "sha256": "77496f7a07e508bb2863a8c3004f57ba1a95be2068827338c828f43f98de39d7"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\fix_xfoil_test.py",
+      "relative_path": "build/fix_xfoil_test.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1951,
+      "source_digests": [
+        {
+          "path": "build/fix_xfoil_test.py",
+          "sha256": "71452764625920c84f65f78bbc9f1298ad5cfc3df0bace25b5de3ddec3cd9cd1"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\fix_xfoil_validate.py",
+      "relative_path": "build/fix_xfoil_validate.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2110,
+      "source_digests": [
+        {
+          "path": "build/fix_xfoil_validate.py",
+          "sha256": "7c4120929d02748430e536fff06b69a627798e5da2024055700074e95550d2fa"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\foil-training-audit.json",
+      "relative_path": "build/foil-training-audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6468,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\foilpara_interface_audit_20261110.json",
+      "relative_path": "build/foilpara_interface_audit_20261110.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3648,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\independent_verify_superfoil_300_split.py",
+      "relative_path": "build/independent_verify_superfoil_300_split.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9819,
+      "source_digests": [
+        {
+          "path": "build/independent_verify_superfoil_300_split.py",
+          "sha256": "4fcfd69b306051026cc237abd53a236ecba6fcd80de7559603d5462df665c4ff"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\inspect_superwing_200_server.py",
+      "relative_path": "build/inspect_superwing_200_server.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1118,
+      "source_digests": [
+        {
+          "path": "build/inspect_superwing_200_server.py",
+          "sha256": "5138f88258139ca74be7d3121605cdf77a80d202d3641f06ba6827363eb00a4b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\lib",
+      "relative_path": "build/lib",
+      "is_directory": true,
+      "files": 39,
+      "size_bytes": 575378,
+      "source_digests": [
+        {
+          "path": "build/lib/flowvae/dataset.py",
+          "sha256": "9d68ccb35480c95a6b2bb2844e7fb410373aefe1036bd9ca16ca678b6a1bbc4a"
+        },
+        {
+          "path": "build/lib/flowvae/post.py",
+          "sha256": "8e46e73e036521b6dcabe4cc9f1b7a53a236601e30d38fc168d56a2c2d63cd30"
+        },
+        {
+          "path": "build/lib/flowvae/utils.py",
+          "sha256": "90253c3a9c88697bbd9a87217794519691d4d4227595560247fa197190b7ffe0"
+        },
+        {
+          "path": "build/lib/flowvae/vae.py",
+          "sha256": "58103b17bdcd222c6144b2a09e27bc46848c8ab04e804a073c8cef61eb2b59ec"
+        },
+        {
+          "path": "build/lib/flowvae/__init__.py",
+          "sha256": "5655dc6fb42288821f53aa23abc5c1af877b6790cf9bb582ebc93aec523bcfb5"
+        },
+        {
+          "path": "build/lib/flowvae/app/buffet.py",
+          "sha256": "d82b7bd01c025e7cc615ad2bbf8997c6988a81aac2a32916d3c556d2fef90252"
+        },
+        {
+          "path": "build/lib/flowvae/app/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/conv.py",
+          "sha256": "2713a2bd1083b6060574609dbae3175169b0ef495d82c1611159451f66717cdb"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/mlp.py",
+          "sha256": "720e9e1107903615019b374c51bcf7ee54080b9f9ca047411129cd058501ca62"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/resnet.py",
+          "sha256": "6d8b623e1fe03221f2ccd52a856d29265da6b62b6f4bf363ce483c7208cc16e3"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/rnn.py",
+          "sha256": "91c2874fa0da2b0b3988a5930511d6cc243f58c73040387b1a5fd9b84767a054"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/utils.py",
+          "sha256": "50f3501fe496b3a109b476164534a7694029ba429737037b22f002b8ae65c9c8"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/config.py",
+          "sha256": "21af4d2fa1909d1e7a55873a4561bcde053f43059b0d8042014777463d576e10"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/ema.py",
+          "sha256": "b770e1b520261277b4a26a55194e326a10b2e7e0830a8ccfbbbdd370bb43af26"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/hf.py",
+          "sha256": "16e7ec580d8aa39924ba938e64d7399b3b7cd36ed61c73ac5924386c39f3ee38"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/kfold.py",
+          "sha256": "6515d7bf93b17090da9237649dd9ab349c676d8c1b013f1e64549efedc96fb19"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/lora.py",
+          "sha256": "a3ccb10ebd2f8daca6fe669d83fe46ec751c9b7eea3d756c790c3b7cb31879f8"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/operator.py",
+          "sha256": "6d807067e8afb9f9afeb2a0e0d459c796cc01b8fb9a723f0395321c2f2079c86"
+        },
+        {
+          "path": "build/lib/flowvae/ml_operator/__init__.py",
+          "sha256": "78861f8a2ab7fa1ace34547f547109a7899e767517daf1770f11300b2c9046d3"
+        },
+        {
+          "path": "build/lib/flowvae/sim/cfl3d.py",
+          "sha256": "5e37d352268bb5448a9afecdd4a40a14ef8b77eea615ff6f3949322c317fe497"
+        },
+        {
+          "path": "build/lib/flowvae/sim/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/lib/flowvae/app/multipoint/api.py",
+          "sha256": "3275a4b1cca656ad56e5aa23f995eb33f48d99fc9169ba5448faf40c45046ff4"
+        },
+        {
+          "path": "build/lib/flowvae/app/multipoint/models.py",
+          "sha256": "fb395c99467a1f56c464237f271d4d47d30b1018dce7b912429fb3a00a371f2a"
+        },
+        {
+          "path": "build/lib/flowvae/app/multipoint/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/lib/flowvae/app/wing/api.py",
+          "sha256": "f354bcb25951a78c67cc8e092258112b08fc8836bddef2d58f690ec298f6fedc"
+        },
+        {
+          "path": "build/lib/flowvae/app/wing/models.py",
+          "sha256": "899bab9ae1ffed45ad243f7d35d58adf15d87a7390a9e5612b59b8bc7919a8ad"
+        },
+        {
+          "path": "build/lib/flowvae/app/wing/utils.py",
+          "sha256": "eae57a66d244590251bbc2e8ce748e7f2faee8efe9110ed8259a3e72c805cd01"
+        },
+        {
+          "path": "build/lib/flowvae/app/wing/__init__.py",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/pdet/final_layer.py",
+          "sha256": "f9dc7c1babf1f136ec38335990de022e91db6e61c765aaf86b9c1822011648a1"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/pdet/pde_transformer.py",
+          "sha256": "916fd78ddb062579c97b099ebfc21c9c45baf3e643594547a420972cf8b7ca34"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/pdet/udit.py",
+          "sha256": "1a96cb2ae72ab5afe20f10b9a180325ece3163df0340c7e3f554d0877a0ec3df"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/pdet/__init__.py",
+          "sha256": "152461eb89d370a8556e69044b78024292691272a79fe7f7086719d78de49b82"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/attention.py",
+          "sha256": "a156dad02be947d139a13ccf202980646cbe2c78fb726438b81ca9c383fa6277"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/sampling.py",
+          "sha256": "094fdf4ec8ea7d8a616efc7f67686b4c9ad08a527f3739bba6b99d3d6d68d56c"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/tokentransolver.py",
+          "sha256": "72aba504fa923589bdd1a9dc0b892f5f960d4a4d229fcbf108dc97c502d37a81"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/transolver.py",
+          "sha256": "5cada28dc7e9e60fa06638b171be7bd40346679ac060284eceab915094ccc4d6"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/vit.py",
+          "sha256": "f0ed64e9fd24edcdbdbd8f66007b2337d21ded0d562d56d44ffb8b55a1c1d9fa"
+        },
+        {
+          "path": "build/lib/flowvae/base_model/trans/__init__.py",
+          "sha256": "25ff942463e980150506d8b3b468d72a14413116ac6630b7277374aed237c5a4"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\locate_superwing_python.py",
+      "relative_path": "build/locate_superwing_python.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2031,
+      "source_digests": [
+        {
+          "path": "build/locate_superwing_python.py",
+          "sha256": "3bb2f94bebee4ab371c211428ebf39b6f82b49e003a1fd24ef992002de1c955a"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\lts_restart_v1_summary.json",
+      "relative_path": "build/lts_restart_v1_summary.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 17002,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\lts_restart_v2_summary.json",
+      "relative_path": "build/lts_restart_v2_summary.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 17040,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\manage_openfoam_server.py",
+      "relative_path": "build/manage_openfoam_server.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4489,
+      "source_digests": [
+        {
+          "path": "build/manage_openfoam_server.py",
+          "sha256": "4eebf1ea7e0f4c42ff65f5cee949e8e707bdb992a67b711a67ef2ce6a057df99"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\manage_superwing_server.py",
+      "relative_path": "build/manage_superwing_server.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5171,
+      "source_digests": [
+        {
+          "path": "build/manage_superwing_server.py",
+          "sha256": "0cc44e9362d7378a08a87fe1ebf2c645f790ccb8a903e67a3e017b43eb1f884e"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\mpl_superfoil_metrics",
+      "relative_path": "build/mpl_superfoil_metrics",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 86462,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_benchmark10_selection.json",
+      "relative_path": "build/openfoam_benchmark10_selection.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2984,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_configuration_smoke.py",
+      "relative_path": "build/openfoam_configuration_smoke.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2152,
+      "source_digests": [
+        {
+          "path": "build/openfoam_configuration_smoke.py",
+          "sha256": "513c52e9bb7a6a44259c05637b031015ac8d71dc0dced991955b697ff9084d5a"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_lts_probe.py",
+      "relative_path": "build/openfoam_lts_probe.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5787,
+      "source_digests": [
+        {
+          "path": "build/openfoam_lts_probe.py",
+          "sha256": "60786b72eaec38be277ab8ff813f7a6c6af9c0e0efd917385527cb9abc2796c3"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_mesh_quality_sample.json",
+      "relative_path": "build/openfoam_mesh_quality_sample.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 33396,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_mesh_row0_v1",
+      "relative_path": "build/openfoam_mesh_row0_v1",
+      "is_directory": true,
+      "files": 6,
+      "size_bytes": 8909139,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_mesh_row0_v2",
+      "relative_path": "build/openfoam_mesh_row0_v2",
+      "is_directory": true,
+      "files": 6,
+      "size_bytes": 8908813,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\openfoam_potential_probe.py",
+      "relative_path": "build/openfoam_potential_probe.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6625,
+      "source_digests": [
+        {
+          "path": "build/openfoam_potential_probe.py",
+          "sha256": "2b126e8001743a8575946418068357e0ed8cfb5c67764bfa803172b71f1ba90c"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\poll_openfoam_configuration.py",
+      "relative_path": "build/poll_openfoam_configuration.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 483,
+      "source_digests": [
+        {
+          "path": "build/poll_openfoam_configuration.py",
+          "sha256": "a1c09f70618e5346406c2b8eaaf779c20c2e6f0e66a0962f21c1d57917e33515"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\preflight_superfoil_300.py",
+      "relative_path": "build/preflight_superfoil_300.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2431,
+      "source_digests": [
+        {
+          "path": "build/preflight_superfoil_300.py",
+          "sha256": "06bc01568f3fe3c2a7be443830de95f7c367202e1cd0f8a93c216dfc37f3e26c"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\prepare_openfoam_benchmark10.py",
+      "relative_path": "build/prepare_openfoam_benchmark10.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2327,
+      "source_digests": [
+        {
+          "path": "build/prepare_openfoam_benchmark10.py",
+          "sha256": "83d9efe75d4072a0a6d73deb8520b6749b503cca6c54bee080e5c85a42b3651c"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\prepare_xfoil_pilot.py",
+      "relative_path": "build/prepare_xfoil_pilot.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1569,
+      "source_digests": [
+        {
+          "path": "build/prepare_xfoil_pilot.py",
+          "sha256": "d93995be51b03fe9bbf641a978c00f7f409478452abbb23919fff6393d756ce6"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\previous_2d_training_metadata_20261110_094609",
+      "relative_path": "build/previous_2d_training_metadata_20261110_094609",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 474192,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\previous_2d_training_metadata_20261110_104829_f09b07",
+      "relative_path": "build/previous_2d_training_metadata_20261110_104829_f09b07",
+      "is_directory": true,
+      "files": 15,
+      "size_bytes": 3345439,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_flogen_runtime.py",
+      "relative_path": "build/probe_flogen_runtime.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1675,
+      "source_digests": [
+        {
+          "path": "build/probe_flogen_runtime.py",
+          "sha256": "deddd56e66eea8ad126d384ac30c2bfaa76e59ae7c21b7f25038dd5c5205db5d"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_openfoam_environment.py",
+      "relative_path": "build/probe_openfoam_environment.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1643,
+      "source_digests": [
+        {
+          "path": "build/probe_openfoam_environment.py",
+          "sha256": "c2c5520737b7cb02b7bf0ded71682337aaf25d3cc8c101d7f8b8412c53d86fe0"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_openfoam_paths.py",
+      "relative_path": "build/probe_openfoam_paths.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1503,
+      "source_digests": [
+        {
+          "path": "build/probe_openfoam_paths.py",
+          "sha256": "f5e8817e9d92f1abc27db2c8880eb394e800567f0dab4abcb789dc11b4e50fbb"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_openfoam_python.py",
+      "relative_path": "build/probe_openfoam_python.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 589,
+      "source_digests": [
+        {
+          "path": "build/probe_openfoam_python.py",
+          "sha256": "e71c08c8a1130db3f511c1902e28bb87dd16cd5c29a8063515ff83c9f3b0762e"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_openfoam_sources.py",
+      "relative_path": "build/probe_openfoam_sources.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 926,
+      "source_digests": [
+        {
+          "path": "build/probe_openfoam_sources.py",
+          "sha256": "2b0360034729d803f29d2e5844668d79b40e7f01e97ec7e6c15f919021974cb7"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_openfoam_wrapper.py",
+      "relative_path": "build/probe_openfoam_wrapper.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 531,
+      "source_digests": [
+        {
+          "path": "build/probe_openfoam_wrapper.py",
+          "sha256": "b3f15bee366487f8bda32220a7ed9a2e4a2fe76c3641826fd936bcfe1c3faa6e"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\probe_superwing_training_server.py",
+      "relative_path": "build/probe_superwing_training_server.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3138,
+      "source_digests": [
+        {
+          "path": "build/probe_superwing_training_server.py",
+          "sha256": "97cdf4da1ecc3e9b097f916d30bcc6953d90673c5384dc0c365a30905694616e"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\publish_data_formats.py",
+      "relative_path": "build/publish_data_formats.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4308,
+      "source_digests": [
+        {
+          "path": "build/publish_data_formats.py",
+          "sha256": "dcabf73452bfe80546a16724c7f562b9de76c0b0e2ebebe98290a7194272199b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\publish_superwing_2d.py",
+      "relative_path": "build/publish_superwing_2d.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 22038,
+      "source_digests": [
+        {
+          "path": "build/publish_superwing_2d.py",
+          "sha256": "c9aaad81ee18f4e6f6d1551a549c5c0ceee573ca2358e23da7674ed79f65986c"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\pytornado-build.log",
+      "relative_path": "build/pytornado-build.log",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 21186,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\pytornado-native-smoke.json",
+      "relative_path": "build/pytornado-native-smoke.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 405,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\raw_database_operating_conditions_audit.json",
+      "relative_path": "build/raw_database_operating_conditions_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 14324,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\read_benchmark10_audit.py",
+      "relative_path": "build/read_benchmark10_audit.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5468,
+      "source_digests": [
+        {
+          "path": "build/read_benchmark10_audit.py",
+          "sha256": "38b185754f576274b99f4b87116e9bb5b4c5f668a0fbb289381b91e324566320"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\read_superwing_epoch_timing.py",
+      "relative_path": "build/read_superwing_epoch_timing.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1556,
+      "source_digests": [
+        {
+          "path": "build/read_superwing_epoch_timing.py",
+          "sha256": "1b0b034ccc630df0f1ee01449f764936b8eb985d5acd67d596892d9afb4f9aa5"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\refresh_case_sld_to_vlm.py",
+      "relative_path": "build/refresh_case_sld_to_vlm.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5010,
+      "source_digests": [
+        {
+          "path": "build/refresh_case_sld_to_vlm.py",
+          "sha256": "5ffa00f81bfa079ba52413bf0421474aaed4a11e42227e34f824d18a1b08b4bd"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\report_openfoam_benchmark10.py",
+      "relative_path": "build/report_openfoam_benchmark10.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4168,
+      "source_digests": [
+        {
+          "path": "build/report_openfoam_benchmark10.py",
+          "sha256": "2c98d177cf07e80a7339ed0f891b2719b6e7f1a0d4f61608fbbd0f09e010f302"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\restart_flogen_components.py",
+      "relative_path": "build/restart_flogen_components.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1893,
+      "source_digests": [
+        {
+          "path": "build/restart_flogen_components.py",
+          "sha256": "f75a4b88c3254657b726b07f7b18342835941dd7494e607056badae4d6b4620b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\run_superfoil_300_background.py",
+      "relative_path": "build/run_superfoil_300_background.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2752,
+      "source_digests": [
+        {
+          "path": "build/run_superfoil_300_background.py",
+          "sha256": "aea1ba4bffbc170c80d99f218ef20d227199b6a4c461def84ec4fc71d580d6ac"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\server_input_transfer_check.json",
+      "relative_path": "build/server_input_transfer_check.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 898,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\server_xfoil_diagnose.sh",
+      "relative_path": "build/server_xfoil_diagnose.sh",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1058,
+      "source_digests": [
+        {
+          "path": "build/server_xfoil_diagnose.sh",
+          "sha256": "d37b5b078dc0082de11c3ef27aa7d2802d2d829697bee8ddebb4c2fd81fb463b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\server_xfoil_probe.sh",
+      "relative_path": "build/server_xfoil_probe.sh",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 901,
+      "source_digests": [
+        {
+          "path": "build/server_xfoil_probe.sh",
+          "sha256": "0167ae7fa5cda7a2f36780f97ef0890e641cc5296120cb8fad3cba9f803c10e0"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\setup_superwing_server_runtime.py",
+      "relative_path": "build/setup_superwing_server_runtime.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3698,
+      "source_digests": [
+        {
+          "path": "build/setup_superwing_server_runtime.py",
+          "sha256": "4ee100a6d4d12a9c12e425f696e64466caf1eaba8d9fcab0f7db6938be1f8665"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\single-case-41-format-backup",
+      "relative_path": "build/single-case-41-format-backup",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 46786,
+      "source_digests": [
+        {
+          "path": "build/single-case-41-format-backup/foilpara/foilgeo/format.md",
+          "sha256": "eab1d8cc4596fa1bb65f3c468c2aaf9ae0b22b4ec4ec2be933223c0bcba4fbe5"
+        },
+        {
+          "path": "build/single-case-41-format-backup/foilpara/foiloc/format.md",
+          "sha256": "43a12d649d6203e6e5e9640fdd32022fad6290906f2c529434f83897413dd9e6"
+        },
+        {
+          "path": "build/single-case-41-format-backup/foilpara/foilsld/format.md",
+          "sha256": "0b33abb26c2ae97b9c4cd012202cf2be1a3c1606141dbdd112611975d68c5f3b"
+        },
+        {
+          "path": "build/single-case-41-format-backup/foilperf/cfd/format.md",
+          "sha256": "888d77b1e15b102df9e568aba8e5d92f4bda74e277494137f571ae44573a88df"
+        },
+        {
+          "path": "build/single-case-41-format-backup/foilperf/network/format.md",
+          "sha256": "27b1007eb32daf592b9b7844b87acd57fd4f927cc21e580720dcd951738ceda0"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\single-case-format-backup",
+      "relative_path": "build/single-case-format-backup",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 39491,
+      "source_digests": [
+        {
+          "path": "build/single-case-format-backup/foilpara/foilgeo/format.md",
+          "sha256": "367b25ef9f6716ae08656fb48fd0493dd0717c5e808e7c5a50d175b7aa348a76"
+        },
+        {
+          "path": "build/single-case-format-backup/foilpara/foiloc/format.md",
+          "sha256": "3271cdfd3e9a858e8703bd10f61dc8385ce8a642f3c3d2d2e145a66dba1e37d6"
+        },
+        {
+          "path": "build/single-case-format-backup/foilpara/foilsld/format.md",
+          "sha256": "f76c58402b28c869f044c0e581cc44379ec446fd7db52ae362f5820a3c613bd6"
+        },
+        {
+          "path": "build/single-case-format-backup/foilperf/cfd/format.md",
+          "sha256": "ba32fe5819aa8a908ac1f71a6ab8ea1b269fd88d05649c5853cf5ccc14bc5115"
+        },
+        {
+          "path": "build/single-case-format-backup/foilperf/network/format.md",
+          "sha256": "7f0cbf53ab1a643dcb2ac48c17e7d5b10de2a18bb8e9705fb135689ea266142a"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\single-case-format-review.json",
+      "relative_path": "build/single-case-format-review.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4654,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\single-case-reader-format-backup",
+      "relative_path": "build/single-case-reader-format-backup",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 44559,
+      "source_digests": [
+        {
+          "path": "build/single-case-reader-format-backup/foilpara/foilgeo/format.md",
+          "sha256": "06cc76898eb183832c0e084aabc86ebadd6d3ec1bfd6fdb22efe98cab7410c7e"
+        },
+        {
+          "path": "build/single-case-reader-format-backup/foilpara/foiloc/format.md",
+          "sha256": "70d45ec24c9c4609454aa1afa7852712243722a8ece2cd101df3947703a094af"
+        },
+        {
+          "path": "build/single-case-reader-format-backup/foilpara/foilsld/format.md",
+          "sha256": "6a8876cd897aefebd956b3952d2b6d5bd922de17e6e1c614e209c6a04bf25f57"
+        },
+        {
+          "path": "build/single-case-reader-format-backup/foilperf/cfd/format.md",
+          "sha256": "b45cbf00a7dfdc7c4d5d3fd970e2434069245798cdff505236e0ed4aa373df50"
+        },
+        {
+          "path": "build/single-case-reader-format-backup/foilperf/network/format.md",
+          "sha256": "2653db40a9bbeec98efcaa4cd4d7d7020bc7f122374542cede67aed4c5857de9"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\single-case-vlm-format-backup",
+      "relative_path": "build/single-case-vlm-format-backup",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 57068,
+      "source_digests": [
+        {
+          "path": "build/single-case-vlm-format-backup/foilpara/foilgeo/format.md",
+          "sha256": "2f5fe23eb2363eef3ecb74f13bbd9379b20627b09df0b42f8794d6c26db87f2c"
+        },
+        {
+          "path": "build/single-case-vlm-format-backup/foilpara/foiloc/format.md",
+          "sha256": "cc0831c53c8185b98e26038033672be3a9ac3386a10faf564cb4ae30e3893f4f"
+        },
+        {
+          "path": "build/single-case-vlm-format-backup/foilpara/foilsld/format.md",
+          "sha256": "d723f46fb86138f1d4026c2ae00be8e1d62f51760f73f6c96c59886f25781e31"
+        },
+        {
+          "path": "build/single-case-vlm-format-backup/foilperf/cfd/format.md",
+          "sha256": "6422d4944ec7311faf2f037e795e2cdc8a5e3daedf4cadf312bdafb523aa460a"
+        },
+        {
+          "path": "build/single-case-vlm-format-backup/foilperf/network/format.md",
+          "sha256": "214b479c3c95dd0665043dc4d5a12edc4a325a2ce18b6dffac7448fa6c211dd4"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\smoke_superwing_200_server.py",
+      "relative_path": "build/smoke_superwing_200_server.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4172,
+      "source_digests": [
+        {
+          "path": "build/smoke_superwing_200_server.py",
+          "sha256": "69730ccce7b00f0f68ca405bb79948cab325a0eacddf5634b5bbdc5d18fe7bac"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\stop_and_archive_superwing_current.py",
+      "relative_path": "build/stop_and_archive_superwing_current.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6764,
+      "source_digests": [
+        {
+          "path": "build/stop_and_archive_superwing_current.py",
+          "sha256": "50ffdf770e1d1b07f54ad31939bf965c097152df17ba4025a12341f78976e888"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\stop_unstable_openfoam_probes.py",
+      "relative_path": "build/stop_unstable_openfoam_probes.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1221,
+      "source_digests": [
+        {
+          "path": "build/stop_unstable_openfoam_probes.py",
+          "sha256": "1ad221cd5ee6331a6e6ce98b796d1a067e07102475e9bd88d6869cfcfb439238"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_300_harder_test_rows.npz",
+      "relative_path": "build/superfoil_300_harder_test_rows.npz",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 29168,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_300_harder_test_rows_manifest.json",
+      "relative_path": "build/superfoil_300_harder_test_rows_manifest.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9178,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_300_near_geometry_condition_audit.json",
+      "relative_path": "build/superfoil_300_near_geometry_condition_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 8482,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_300_preflight.json",
+      "relative_path": "build/superfoil_300_preflight.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 568,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_300_split_independent_verification.json",
+      "relative_path": "build/superfoil_300_split_independent_verification.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 7839,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_new_split_review.json",
+      "relative_path": "build/superfoil_new_split_review.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3752,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_reuse_audit.json",
+      "relative_path": "build/superfoil_reuse_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 12388,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superfoil_superwing_cst_reuse_audit.json",
+      "relative_path": "build/superfoil_superwing_cst_reuse_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5769,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing-case-000000",
+      "relative_path": "build/superwing-case-000000",
+      "is_directory": true,
+      "files": 17,
+      "size_bytes": 3969636,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing-vlm-case-000000",
+      "relative_path": "build/superwing-vlm-case-000000",
+      "is_directory": true,
+      "files": 17,
+      "size_bytes": 3973696,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_200_deployment.json",
+      "relative_path": "build/superwing_200_deployment.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6924,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_200_launch_verification.json",
+      "relative_path": "build/superwing_200_launch_verification.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 12646,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_200_progress_snapshot.json",
+      "relative_path": "build/superwing_200_progress_snapshot.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 12331,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_200_server_smoke_result.json",
+      "relative_path": "build/superwing_200_server_smoke_result.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1773,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_200_smoke_input",
+      "relative_path": "build/superwing_200_smoke_input",
+      "is_directory": true,
+      "files": 6,
+      "size_bytes": 14221364,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_2d_inputs",
+      "relative_path": "build/superwing_2d_inputs",
+      "is_directory": true,
+      "files": 11,
+      "size_bytes": 502041396,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_2d_inputs_complete",
+      "relative_path": "build/superwing_2d_inputs_complete",
+      "is_directory": true,
+      "files": 14,
+      "size_bytes": 502048201,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_2d_inputs_complete_audit.json",
+      "relative_path": "build/superwing_2d_inputs_complete_audit.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1803,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_2d_inputs_smoke",
+      "relative_path": "build/superwing_2d_inputs_smoke",
+      "is_directory": true,
+      "files": 11,
+      "size_bytes": 316434,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_2d_inputs_smoke_v2",
+      "relative_path": "build/superwing_2d_inputs_smoke_v2",
+      "is_directory": true,
+      "files": 14,
+      "size_bytes": 322835,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_bs8_progress_snapshot.json",
+      "relative_path": "build/superwing_bs8_progress_snapshot.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 11761,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_checkpoint_030_review.json",
+      "relative_path": "build/superwing_checkpoint_030_review.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3915,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_epoch_throughput_benchmark.json",
+      "relative_path": "build/superwing_epoch_throughput_benchmark.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 645,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_epoch_timing_snapshot.json",
+      "relative_path": "build/superwing_epoch_timing_snapshot.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3038,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_old_stop_archive.json",
+      "relative_path": "build/superwing_old_stop_archive.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1441,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_server_transfer\\data.npy.gz",
+      "relative_path": "build/superwing_server_transfer/data.npy.gz",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 10472761530,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_server_transfer\\geom0.npy.gz",
+      "relative_path": "build/superwing_server_transfer/geom0.npy.gz",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2084517109,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_server_transfer\\origingeom.npy.gz",
+      "relative_path": "build/superwing_server_transfer/origingeom.npy.gz",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2105319657,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\superwing_training_server_probe.json",
+      "relative_path": "build/superwing_training_server_probe.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2489,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\update_reader_docs.py",
+      "relative_path": "build/update_reader_docs.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3791,
+      "source_digests": [
+        {
+          "path": "build/update_reader_docs.py",
+          "sha256": "8c6cdd1b84a13d07a5e2a5694b04932bb6a88c5c09c22655a053ac3a8962c373"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\update_single_case_formats.py",
+      "relative_path": "build/update_single_case_formats.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 5935,
+      "source_digests": [
+        {
+          "path": "build/update_single_case_formats.py",
+          "sha256": "7c8d8563cb0791756b39bf31fea5ca7c4e227854e7c915f8bfc3e70557d03f1b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_2d_document.py",
+      "relative_path": "build/verify_2d_document.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1520,
+      "source_digests": [
+        {
+          "path": "build/verify_2d_document.py",
+          "sha256": "e3e2c6d37cf4768957520328b8eee1aeecd783121e2bcc8c63ae85b92f418c7a"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_2d_training.py",
+      "relative_path": "build/verify_2d_training.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3009,
+      "source_digests": [
+        {
+          "path": "build/verify_2d_training.py",
+          "sha256": "536ae9fa8efbf3446c96d9d281296199e4841d3bb37f4357eaf9b4d6649ba5e5"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_server_superwing_inputs.py",
+      "relative_path": "build/verify_server_superwing_inputs.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1180,
+      "source_digests": [
+        {
+          "path": "build/verify_server_superwing_inputs.py",
+          "sha256": "5a6cb7304c408ab90f1a987ce739745de52d20544f03548235e60bd03044ddbb"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_superfoil_300_final.py",
+      "relative_path": "build/verify_superfoil_300_final.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 18733,
+      "source_digests": [
+        {
+          "path": "build/verify_superfoil_300_final.py",
+          "sha256": "39518d8c2ec78a79fc858c7df524b936cd30b9f6382730b30912cf5fc53eaa41"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_superwing_2d_inputs_complete.py",
+      "relative_path": "build/verify_superwing_2d_inputs_complete.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 6239,
+      "source_digests": [
+        {
+          "path": "build/verify_superwing_2d_inputs_complete.py",
+          "sha256": "6ecdc5470dc80fb9b007b0964e33aeac393b00763d9e1d46cec1e1dcd5a3a459"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_superwing_export.py",
+      "relative_path": "build/verify_superwing_export.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3107,
+      "source_digests": [
+        {
+          "path": "build/verify_superwing_export.py",
+          "sha256": "0def6ca7af53657c02706637bc3084a55acde58da6cfaf7b75da9060475097b6"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\verify_superwing_launch.py",
+      "relative_path": "build/verify_superwing_launch.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3572,
+      "source_digests": [
+        {
+          "path": "build/verify_superwing_launch.py",
+          "sha256": "7dd659e35b5c17c9f0695f5e7aab46bb59cba0c3d45ba2c7cf65234c6c586506"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\build\\vlm-sld-refresh-backup",
+      "relative_path": "build/vlm-sld-refresh-backup",
+      "is_directory": true,
+      "files": 5,
+      "size_bytes": 15355,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\vlm-sld-refresh-review.json",
+      "relative_path": "build/vlm-sld-refresh-review.json",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 2477,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\xfoil_pilot_inputs",
+      "relative_path": "build/xfoil_pilot_inputs",
+      "is_directory": true,
+      "files": 9,
+      "size_bytes": 28518,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\zig-pytornado-global-cache",
+      "relative_path": "build/zig-pytornado-global-cache",
+      "is_directory": true,
+      "files": 1985,
+      "size_bytes": 86988264,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build\\zig-pytornado-local-cache",
+      "relative_path": "build/zig-pytornado-local-cache",
+      "is_directory": true,
+      "files": 11,
+      "size_bytes": 870740,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\build_superwing_2d.py",
+      "relative_path": "build_superwing_2d.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 23268,
+      "source_digests": [
+        {
+          "path": "build_superwing_2d.py",
+          "sha256": "426c826dc1f355f5ca5bdfcf57385f937a37e8b247f860ac0a91f33490b91769"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\docs\\make.bat",
+      "relative_path": "docs/make.bat",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 804,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\docs\\Makefile",
+      "relative_path": "docs/Makefile",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 658,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\docs\\requirements.txt",
+      "relative_path": "docs/requirements.txt",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 37,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\docs\\source",
+      "relative_path": "docs/source",
+      "is_directory": true,
+      "files": 46,
+      "size_bytes": 6709079,
+      "source_digests": [
+        {
+          "path": "docs/source/airfoildataset.md",
+          "sha256": "7a010444bb412f8da7b51b3da2e44eb6079dbbe7f1863ddf87413f519a8479ae"
+        },
+        {
+          "path": "docs/source/buffet.md",
+          "sha256": "a14929b6356dfeadf549532427531fcf981345fb5bb78768247dc7163165b74b"
+        },
+        {
+          "path": "docs/source/conf.py",
+          "sha256": "1047ef84472a8aaa4c841d861f8cbfa1c06ba356b95e8ad125e75e6526e550cd"
+        },
+        {
+          "path": "docs/source/index.rst",
+          "sha256": "00b635d41a66d64acfca3896b28a7a89c322be0d515066d7625af251da6e6b3e"
+        },
+        {
+          "path": "docs/source/models.md",
+          "sha256": "65fe30253680da23cabd3ebcc7ef2ef4a0617c3d9a7579d30d047a9e86b1b66e"
+        },
+        {
+          "path": "docs/source/motivation.md",
+          "sha256": "113eb1d43d6dab4bf77dd18f058b2494c99be9d1f3857c0dd556631cad968ef6"
+        },
+        {
+          "path": "docs/source/simpleguide.md",
+          "sha256": "db47e61f91bd69660998b33bb95b53d73b45812ed4785370da3df8cd6829f7d0"
+        },
+        {
+          "path": "docs/source/wingapp.md",
+          "sha256": "7057d74285bbd9f4063e19cc1a0a9c2363b8a2f3bfba57334e1c6dfcb0031249"
+        },
+        {
+          "path": "docs/source/wingdataset.md",
+          "sha256": "88f55cb8e7b04cec1319feb11354e017eb69001454ba706a98c15d4447f92420"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\examples\\buffet",
+      "relative_path": "examples/buffet",
+      "is_directory": true,
+      "files": 3,
+      "size_bytes": 9159,
+      "source_digests": [
+        {
+          "path": "examples/buffet/postprocess.py",
+          "sha256": "1aef80427f8814ac418c5e991f393687b28d08e9d43f4617739a057f367ac428"
+        },
+        {
+          "path": "examples/buffet/preprocess.py",
+          "sha256": "7c8e2a3906a2bd1dedf0c2f8f6199684b59425df84534c0f4c6661fd3043b22a"
+        },
+        {
+          "path": "examples/buffet/run.py",
+          "sha256": "c504363b15a2912afb466e8d6a50f31c246e4072a63faf55588b8181f059cce4"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\examples\\nozzle",
+      "relative_path": "examples/nozzle",
+      "is_directory": true,
+      "files": 4,
+      "size_bytes": 36953,
+      "source_digests": [
+        {
+          "path": "examples/nozzle/postprocess.py",
+          "sha256": "7d934fde7b6868c3355b70405d1d118c4a70938cba0fe2d5bb753e717243562f"
+        },
+        {
+          "path": "examples/nozzle/run_decoder.py",
+          "sha256": "df839721e09a4b5878bca9959a0b47ccb14e1283969f87aa0a040744af8f88ba"
+        },
+        {
+          "path": "examples/nozzle/run_punet.py",
+          "sha256": "c80852be1a8412be652ecdfe917095962eb277818497a1803d351841858705ac"
+        },
+        {
+          "path": "examples/nozzle/utils.py",
+          "sha256": "713d70675c33de1c1709ade2c0f719b6564677fdbc7d73c2f4259ce26fcd9397"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\flowvae\\__pycache__",
+      "relative_path": "flowvae/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 182,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\flowvae\\app\\buffet.py",
+      "relative_path": "flowvae/app/buffet.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 49109,
+      "source_digests": [
+        {
+          "path": "flowvae/app/buffet.py",
+          "sha256": "d82b7bd01c025e7cc615ad2bbf8997c6988a81aac2a32916d3c556d2fef90252"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\flowvae\\app\\multipoint\\api.py",
+      "relative_path": "flowvae/app/multipoint/api.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 23031,
+      "source_digests": [
+        {
+          "path": "flowvae/app/multipoint/api.py",
+          "sha256": "3275a4b1cca656ad56e5aa23f995eb33f48d99fc9169ba5448faf40c45046ff4"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\openfoam_airfoil_case.py",
+      "relative_path": "openfoam_airfoil_case.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 25344,
+      "source_digests": [
+        {
+          "path": "openfoam_airfoil_case.py",
+          "sha256": "eba66f139ae5ce733e9535303ebd63b93029104b97c7c9ab6642289ae0682278"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\openfoam_airfoil_mesh.py",
+      "relative_path": "openfoam_airfoil_mesh.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 17931,
+      "source_digests": [
+        {
+          "path": "openfoam_airfoil_mesh.py",
+          "sha256": "eb94b34699b2db81a1c51d2c40833c77d34e07191827feb6f94b26637a17343c"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\openfoam_airfoil_pack.py",
+      "relative_path": "openfoam_airfoil_pack.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 16760,
+      "source_digests": [
+        {
+          "path": "openfoam_airfoil_pack.py",
+          "sha256": "ece0d25cfe40922cbf997900a0a2e66ef438b6e976ea8b070f95928b4b2d2cbc"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\openfoam_airfoil_post.py",
+      "relative_path": "openfoam_airfoil_post.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 27464,
+      "source_digests": [
+        {
+          "path": "openfoam_airfoil_post.py",
+          "sha256": "e8217906e2a4a546faf622f59437f8d6feace220ae5d0af473e8c164d7ae7d3e"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\openfoam_case_archive.py",
+      "relative_path": "openfoam_case_archive.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 19086,
+      "source_digests": [
+        {
+          "path": "openfoam_case_archive.py",
+          "sha256": "eeac2cad4e8b0ff714780bec7f6741a6313a7a0952bea3337d9ad18ee36a3850"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\run_superwing_openfoam.py",
+      "relative_path": "run_superwing_openfoam.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 23944,
+      "source_digests": [
+        {
+          "path": "run_superwing_openfoam.py",
+          "sha256": "ec043a11b46e612f4eb68a74b9ba9f7570a8c5f335233327220c1c12bf1af4f9"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\run_superwing_xfoil.py",
+      "relative_path": "run_superwing_xfoil.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 39012,
+      "source_digests": [
+        {
+          "path": "run_superwing_xfoil.py",
+          "sha256": "51e88b9142c6738c821f49a18be067a2aa04e2b5d295a4acadac7407eace8699"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\__pycache__",
+      "relative_path": "tests/__pycache__",
+      "is_directory": true,
+      "files": 1,
+      "size_bytes": 15626,
+      "source_digests": []
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_build_superwing_2d.py",
+      "relative_path": "tests/test_build_superwing_2d.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 3691,
+      "source_digests": [
+        {
+          "path": "tests/test_build_superwing_2d.py",
+          "sha256": "c7092ee61fdcab6523b18a0ce364dd59a2eac8d6d77dc086826e4852c5a6874a"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_openfoam_airfoil_case.py",
+      "relative_path": "tests/test_openfoam_airfoil_case.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 8068,
+      "source_digests": [
+        {
+          "path": "tests/test_openfoam_airfoil_case.py",
+          "sha256": "0f40ba10ecd60f4d4e5f2a80616cbb62b0e9e81bc011572471b0416a006b54f9"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_openfoam_airfoil_mesh.py",
+      "relative_path": "tests/test_openfoam_airfoil_mesh.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 4556,
+      "source_digests": [
+        {
+          "path": "tests/test_openfoam_airfoil_mesh.py",
+          "sha256": "17b605b8d7ad74af5eba8e68cf3ab0e867df5c6f1bb59ffbeac8ce9b6563e459"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_openfoam_airfoil_pack.py",
+      "relative_path": "tests/test_openfoam_airfoil_pack.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 7485,
+      "source_digests": [
+        {
+          "path": "tests/test_openfoam_airfoil_pack.py",
+          "sha256": "78dabe6bb50e65d9b0259ab2d4d6b913c2ee61cedeeca3cdb6e465d7f76d73af"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_openfoam_airfoil_post.py",
+      "relative_path": "tests/test_openfoam_airfoil_post.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 11020,
+      "source_digests": [
+        {
+          "path": "tests/test_openfoam_airfoil_post.py",
+          "sha256": "48c4299fb8f59e1665a5fb2f1e92ed0dd5215e2ca7c4bb21cbfba78af5322909"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_openfoam_case_archive.py",
+      "relative_path": "tests/test_openfoam_case_archive.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9844,
+      "source_digests": [
+        {
+          "path": "tests/test_openfoam_case_archive.py",
+          "sha256": "15eb22d94d0c78555562fddb8f9d6b386e6a279c770d45e70c2fdb238511d910"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_publish_superwing_2d.py",
+      "relative_path": "tests/test_publish_superwing_2d.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 9419,
+      "source_digests": [
+        {
+          "path": "tests/test_publish_superwing_2d.py",
+          "sha256": "18515d82ca01ef0db474ef80e8cefc5628ccf470c51d0849bae3882e8b09ab71"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_run_superwing_openfoam.py",
+      "relative_path": "tests/test_run_superwing_openfoam.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 1921,
+      "source_digests": [
+        {
+          "path": "tests/test_run_superwing_openfoam.py",
+          "sha256": "e883971dcb01ea4d278efa99d267a2c17a94b192a32ef521378c02c6add6932b"
+        }
+      ]
+    },
+    {
+      "path": "D:\\floGen\\tests\\test_run_superwing_xfoil.py",
+      "relative_path": "tests/test_run_superwing_xfoil.py",
+      "is_directory": false,
+      "files": 1,
+      "size_bytes": 10311,
+      "source_digests": [
+        {
+          "path": "tests/test_run_superwing_xfoil.py",
+          "sha256": "0c8b327456c2de53e4ca75ee1e6c1dfadee4516771bdb2267a700d94b69c4620"
+        }
+      ]
+    }
+  ],
+  "files_to_remove": 2917,
+  "bytes_to_remove": 15827052261,
+  "preserved_build_entries": [
+    "airfoils-scipy-compat",
+    "airfoils-scipy-compatibility.json",
+    "build_airfoils_scipy_compat.py",
+    "build_pytornado_windows.py",
+    "check_superwing_bs8_progress.py",
+    "check_superwing_server.py",
+    "foil_meta_for_condition_audit.npz",
+    "launch_superwing_bs8.py",
+    "pytornado-build-compatibility.json",
+    "pytornado-build-info.json",
+    "pytornado-original",
+    "pytornado-source",
+    "pytornado-wheels",
+    "pytornado_native_smoke.py",
+    "run_superfoil_60_background.py",
+    "run_superwing_200_server.py",
+    "server_known_hosts",
+    "setup_pytornado_windows.py",
+    "setup_superwing_flogen_runtime.py",
+    "stage_superwing_200.py",
+    "superwing_200_bs8_20261111_190048.local_launch.json",
+    "superwing_200_bs8_config.json",
+    "superwing_200_config.json",
+    "superwing_bs8_restart_verification.json",
+    "superwing_server_transfer",
+    "test_airfoils_scipy_compat.py"
+  ]
+}

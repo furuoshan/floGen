@@ -1,0 +1,66 @@
+{
+  "source_row": 3248,
+  "geometry_id": 456,
+  "test_member": true,
+  "basis": "Independent complete-model CPU inference with freshly computed official VLM",
+  "per_channel": {
+    "cp": {
+      "prior_nmae_percent": 36.17589705565541,
+      "final_nmae_percent": 0.2762785868762137,
+      "correction_mean_absolute_over_true_amplitude_percent": 212.70549306320189,
+      "prior_range_stored": [
+        -3.198662042617798,
+        2.0296154022216797
+      ],
+      "truth_range_stored": [
+        -1.502590537071228,
+        1.0392166376113892
+      ]
+    },
+    "cf_tau": {
+      "prior_nmae_percent": 12.73309803607235,
+      "final_nmae_percent": 0.24808935305577895,
+      "correction_mean_absolute_over_true_amplitude_percent": 73.07553125707116,
+      "prior_range_stored": [
+        -1.4392350912094116,
+        0.6655435562133789
+      ],
+      "truth_range_stored": [
+        -0.7831442356109619,
+        1.412921667098999
+      ]
+    },
+    "cf_z": {
+      "prior_nmae_percent": 6.104009865677545,
+      "final_nmae_percent": 0.24984663303214513,
+      "correction_mean_absolute_over_true_amplitude_percent": 100.22410099046286,
+      "prior_range_stored": [
+        0.0,
+        0.0
+      ],
+      "truth_range_stored": [
+        -1.69246244430542,
+        0.5836448669433594
+      ]
+    }
+  },
+  "effective_2d_Re_in_millions_range": [
+    6.048163890838623,
+    21.789417266845703
+  ],
+  "airfoil_condition_normalizer_min": [
+    0.675000011920929,
+    -0.4787594676017761,
+    20.0
+  ],
+  "airfoil_condition_normalizer_scale": [
+    0.11500000953674316,
+    1.8233418464660645,
+    1.0
+  ],
+  "normalizer_order": [
+    "Mach",
+    "CL",
+    "Re_millions"
+  ]
+}
